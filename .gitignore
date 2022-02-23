@@ -9,6 +9,14 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Mm]emoryCaptures/
+/[Uu]ser[Ss]ettings/
+
+# Ignore Probuilder Settings and TestTools
+/ProjectSettings/Packages/com.unity.probuilder/Settings.json
+/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json
+
+# Ignore DS_Store generate from mac users
+.DS_Store
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
@@ -21,6 +29,9 @@
 
 # Visual Studio cache directory
 .vs/
+.vscode/
+.idea/
+.vsconfig
 
 # Gradle cache directory
 .gradle/
@@ -57,6 +68,9 @@ sysinfo.txt
 
 # Crashlytics generated file
 crashlytics-build.properties
+
+# Packed Addressables
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 
 # Saves
 /Assets/Saves/**
