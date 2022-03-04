@@ -26,7 +26,7 @@ public class CharController : MonoBehaviour
     float curSpeedY;
 
     //Bool to use in future to dictate when player is not allowed to move
-    bool canMove = true;
+    public bool canMove = true;
 
     bool camAtPlayer = false;
 
