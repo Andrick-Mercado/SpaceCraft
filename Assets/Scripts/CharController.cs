@@ -12,6 +12,8 @@ public class CharController : MonoBehaviour
     public float camSpeed = 2f;
     public float lookUpDownLimit = 45f;
 
+
+
     //Grab reference to player Camera
     public Camera playerCamera;
     //Declare reference to character controller inspector component
@@ -26,10 +28,14 @@ public class CharController : MonoBehaviour
     //Bool to use in future to dictate when player is not allowed to move
     bool canMove = true;
 
+    bool camAtPlayer = false;
+
     void Start()
     {
         //Grab reference to character controller component
         characterController = GetComponent<CharacterController>();
+
+
 
         //Locks and makes Mouse Cursor invisible when focused on game window
         Cursor.lockState = CursorLockMode.Locked;
@@ -92,10 +98,32 @@ public class CharController : MonoBehaviour
             //Calculate X rotation clamp so character doesent bend neck backwards or into self
             rotationX = Mathf.Clamp(rotationX, -lookUpDownLimit, lookUpDownLimit);
 
-            //Rotate Camera on X axis, avoids rotating entire char when looking up or down
-            playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+            //Rotate Camera on X axis
+            if (camAtPlayer)
+            {
+                playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 180, 0);
+            }
+            else playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
             //Rotate Player Character on Y axis
             transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * camSpeed, 0);
+        }
+        //First Person
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            camAtPlayer = false;
+            playerCamera.transform.localPosition = new Vector3(0,1,0);
+        }
+        //Third Person
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            camAtPlayer = false;
+            playerCamera.transform.localPosition = new Vector3(0,2,-5);
+        }
+        //Third Person Looking at Character
+        else if (Input.GetKey(KeyCode.Alpha3))
+        {
+            camAtPlayer = true;
+            playerCamera.transform.localPosition = new Vector3(0, 2, 5);
         }
     }
 }
