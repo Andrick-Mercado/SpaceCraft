@@ -35,8 +35,6 @@ public class CharController : MonoBehaviour
         //Grab reference to character controller component
         characterController = GetComponent<CharacterController>();
 
-
-
         //Locks and makes Mouse Cursor invisible when focused on game window
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
