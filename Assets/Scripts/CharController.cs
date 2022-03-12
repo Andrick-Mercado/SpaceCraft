@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class CharController : MonoBehaviour
@@ -31,10 +33,21 @@ public class CharController : MonoBehaviour
     public bool canMove = true;
 
     bool camAtPlayer = false;
+    
+    //for multiplayer
+    private PhotonView _view;
+
+
+    private void Awake()
+    {
+        //get photon view component
+        _view = GetComponent<PhotonView>();
+    }
 
     void Start()
     {
-
+        //closestMass
+        closestMass = GameObject.Find("Planet").transform;
         //grab reference to the Character's rigidbody
         rb = GetComponent<Rigidbody>();
 
@@ -42,10 +55,19 @@ public class CharController : MonoBehaviour
         //Locks and makes Mouse Cursor invisible when focused on game window
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        
+        //setting up camera for multiplayer
+        if (!_view.IsMine)
+        {
+            Destroy(GetComponentInChildren<Camera>().gameObject);
+            Destroy(rb);
+        }
     }
 
     void FixedUpdate()
     {
+        //prevent other players from moving others
+        if (!_view.IsMine) return;
         
         //Get transform position for forward and right based on current direction facing
         Vector3 forward = transform.TransformDirection(Vector3.forward);
