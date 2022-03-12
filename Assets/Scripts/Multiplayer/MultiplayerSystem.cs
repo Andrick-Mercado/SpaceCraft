@@ -16,6 +16,7 @@ public class MultiplayerSystem : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
+        
         Debug.Log("Connected To Server");
     }
 }
