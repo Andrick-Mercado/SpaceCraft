@@ -52,6 +52,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         MenuManager.Instance.CloseAllOpenMenus();
         SceneManager.LoadScene(1); //name or number of scene here
+        //pos player Vector3(36.7000008f,0.699999988f,0f)
+        
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
