@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1767980584972453926}
-  - component: {fileID: 1767980584972453927}
   - component: {fileID: 1767980584972453912}
   - component: {fileID: 9155223872309843206}
   - component: {fileID: 1595884993147087743}
@@ -37,24 +36,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!143 &1767980584972453927
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1767980584972453913}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1767980584972453912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,16 +48,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3abcc14547249844ea36717f75907be5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 7
-  runSpeed: 11
+  walkSpeed: 500
+  runSpeed: 1000
   jumpSpeed: 8
-  gravity: 20
+  gravity: 5
   camSpeed: 2
-  lookUpDownLimit: 60
-  acceleration: 0
+  lookUpDownLimit: 45
+  acceleration: 0.9
   closestMass: {fileID: 0}
-  runKey: 0
-  jumpKey: 0
+  runKey: 304
+  jumpKey: 32
   playerCamera: {fileID: 1767980585851749910}
   canMove: 1
 --- !u!114 &9155223872309843206
@@ -132,7 +113,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!1 &1767980585536848679
 GameObject:

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
@@ -36,7 +37,13 @@ public class CharController : MonoBehaviour
     //for multiplayer
     private PhotonView _view;
 
-    
+
+    private void Awake()
+    {
+        //get photon view component
+        _view = GetComponent<PhotonView>();
+    }
+
     void Start()
     {
         //closestMass
@@ -49,8 +56,12 @@ public class CharController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         
-        //get photon view component
-        _view = GetComponent<PhotonView>();
+        //setting up camera for multiplayer
+        if (!_view.IsMine)
+        {
+            Destroy(GetComponentInChildren<Camera>().gameObject);
+            Destroy(rb);
+        }
     }
 
     void FixedUpdate()
