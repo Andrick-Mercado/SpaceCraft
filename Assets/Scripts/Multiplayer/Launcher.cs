@@ -34,10 +34,10 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         MenuManager.Instance.OpenMenu("mainMenu");
-        Debug.Log("Connected To Server");
+        //Debug.Log("Connected To Server");
     }
 
-    /**  Methods below are for after connecting to server   **/
+    /**  Methods below are for after connecting to server through UI  **/
     
     public void CreateRoom()
     {
@@ -53,9 +53,6 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         MenuManager.Instance.CloseAllOpenMenus();
         PhotonNetwork.LoadLevel(1); //name or number of scene here
-        //pos player new Vector3(36.7000008f,0.699999988f,0f)
-        //.Instantiate(playerPrefab.name,
-            //new Vector3(36.7000008f, 0.699999988f, 0f), Quaternion.identity);
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
@@ -66,13 +63,18 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void LeaveRoom()
     {
+        //MenuManager.Instance.OpenMenu("loadingMenu");
+        //MenuManager.Instance.CloseMenu("pauseMenu");
+        
+        //Destroy(RoomManager.Instance.gameObject);
         PhotonNetwork.LeaveRoom();
-        MenuManager.Instance.OpenMenu("loadingMenu");
     }
 
     public override void OnLeftRoom()
     {
-        MenuManager.Instance.OpenMenu("mainMenu");
+        //MenuManager.Instance.OpenMenu("mainMenu");
+        PhotonNetwork.LoadLevel(0);
+        //MenuManager.Instance.OpenMenu("mainMenu");
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)

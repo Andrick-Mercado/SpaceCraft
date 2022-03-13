@@ -10,7 +10,6 @@ using UnityEngine.SceneManagement;
 public class RoomManager : MonoBehaviourPunCallbacks
 {
     public static RoomManager Instance;
-    [SerializeField] private GameObject playerPrefab;
 
     private void Awake()
     {
@@ -41,17 +40,5 @@ public class RoomManager : MonoBehaviourPunCallbacks
             PhotonNetwork.Instantiate(Path.Combine("PlayerManager"),
                 Vector3.zero, Quaternion.identity);
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

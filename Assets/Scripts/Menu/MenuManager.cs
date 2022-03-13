@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class MenuManager : MonoBehaviour
@@ -32,6 +33,18 @@ public class MenuManager : MonoBehaviour
         menu.Open();
     }
 
+    public void CloseMenu(string menuName)
+    {
+        foreach (var t in menus)
+        {
+            if (t.menuName == menuName)
+            {
+                CloseMenu(t);
+            }
+        }
+        
+    }
+    
     public void CloseMenu(Menu menu)
     {
         menu.Close();
@@ -46,5 +59,10 @@ public class MenuManager : MonoBehaviour
                 CloseMenu(t);
             }
         }
+    }
+
+    public bool IsMenuOpen(string menuName)
+    {
+        return menus.Any(t => t.menuName == menuName && t.open);
     }
 }
