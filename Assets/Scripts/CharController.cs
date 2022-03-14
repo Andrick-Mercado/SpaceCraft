@@ -68,12 +68,12 @@ public class CharController : MonoBehaviour
 
     private void Update()
     {
-        //prevent other players from moving others
+        //prevent other players from opening pause menu
         if (!_view.IsMine) return;
         
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (_paused )
+            if (_paused)
             {
                 MenuManager.Instance.CloseMenu("pauseMenu");
                 _paused = false;
