@@ -29,7 +29,6 @@ public class MenuManager : MonoBehaviour
 
     public void OpenMenu(Menu menu)
     {
-        CloseAllOpenMenus();
         menu.Open();
     }
 

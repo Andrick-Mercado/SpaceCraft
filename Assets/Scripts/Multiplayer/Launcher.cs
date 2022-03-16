@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -20,9 +20,11 @@ public class Launcher : MonoBehaviourPunCallbacks
         Instance = this;
     }
 
-    void Start()
+    /** CONNECTING TO LOBBY = SERVER **/
+    private void Start()
     {
-        PhotonNetwork.ConnectUsingSettings();
+        //if(!PhotonNetwork.IsConnected) //if code used between scenes uncomment
+            PhotonNetwork.ConnectUsingSettings();
     }
     
     public override void OnConnectedToMaster()
@@ -34,10 +36,9 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         MenuManager.Instance.OpenMenu("mainMenu");
-        //Debug.Log("Connected To Server");
     }
 
-    /**  Methods below are for after connecting to server through UI  **/
+    /** Creating/Joining ROOMS  **/
     
     public void CreateRoom()
     {
@@ -48,6 +49,32 @@ public class Launcher : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom(createdRoomName.text);
         MenuManager.Instance.OpenMenu("loadingMenu");
     }
+    
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        errorText.text = "Room creation failed with message: " + message;
+        MenuManager.Instance.OpenMenu("errorMenu");
+    }
+    
+    public void JoinRoom(RoomInfo info)
+    {
+        PhotonNetwork.JoinRoom(info.Name);
+        MenuManager.Instance.OpenMenu("loadingMenu");
+    }
+    
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        foreach (Transform t in roomListContent)
+        {
+            Destroy(t.gameObject);
+        }
+
+        foreach (var t in roomList.Where(t => !t.RemovedFromList))
+        {
+            Instantiate(roomListItemPrefab,
+                roomListContent).GetComponent<RoomListItem>().SetUp(t);
+        }
+    }
 
     public override void OnJoinedRoom()
     {
@@ -55,48 +82,14 @@ public class Launcher : MonoBehaviourPunCallbacks
         PhotonNetwork.LoadLevel(1); //name or number of scene here
     }
 
-    public override void OnCreateRoomFailed(short returnCode, string message)
+    public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        errorText.text = "Room creation failed with message: " + message;
+        errorText.text = "Room join failed with message: " + message;
         MenuManager.Instance.OpenMenu("errorMenu");
     }
 
-    public void LeaveRoom()
-    {
-        //MenuManager.Instance.OpenMenu("loadingMenu");
-        //MenuManager.Instance.CloseMenu("pauseMenu");
-        
-        //Destroy(RoomManager.Instance.gameObject);
-        PhotonNetwork.LeaveRoom();
-    }
-
-    public override void OnLeftRoom()
-    {
-        //MenuManager.Instance.OpenMenu("mainMenu");
-        PhotonNetwork.LoadLevel(0);
-        //MenuManager.Instance.OpenMenu("mainMenu");
-    }
-
-    public override void OnRoomListUpdate(List<RoomInfo> roomList)
-    {
-        foreach (Transform t in roomListContent)
-        {
-            Destroy(t.gameObject);
-        }
-        
-        foreach (var t in roomList)
-        {
-            Instantiate(roomListItemPrefab,
-                roomListContent).GetComponent<RoomListItem>().SetUp(t);
-        }
-    }
-
-    public void JoinRoom(RoomInfo info)
-    {
-        PhotonNetwork.JoinRoom(info.Name);
-        MenuManager.Instance.OpenMenu("loadingMenu");
-    }
-
+    /** other utilities **/
+    
     public void Quit()
     {
 #if UNITY_EDITOR

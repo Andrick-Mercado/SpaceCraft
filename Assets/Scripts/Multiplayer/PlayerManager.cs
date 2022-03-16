@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using Photon.Pun;
@@ -15,13 +12,14 @@ public class PlayerManager : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         if(_view.IsMine)
             CreateController();
     }
 
-    private void CreateController()
+    //spawns in the player prefab at a given location
+    private static void CreateController()
     {
         PhotonNetwork.Instantiate(Path.Combine("Player"),
             new Vector3(36.7000008f, 0.699999988f, 0f), Quaternion.identity);
