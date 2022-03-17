@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -20,9 +20,11 @@ public class Launcher : MonoBehaviourPunCallbacks
         Instance = this;
     }
 
-    void Start()
+    /** CONNECTING TO LOBBY = SERVER **/
+    private void Start()
     {
-        PhotonNetwork.ConnectUsingSettings();
+        //if(!PhotonNetwork.IsConnected) //if code used between scenes uncomment
+            PhotonNetwork.ConnectUsingSettings();
     }
     
     public override void OnConnectedToMaster()
@@ -34,10 +36,9 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         MenuManager.Instance.OpenMenu("mainMenu");
-        Debug.Log("Connected To Server");
     }
 
-    /**  Methods below are for after connecting to server   **/
+    /** Creating/Joining ROOMS  **/
     
     public void CreateRoom()
     {
@@ -48,53 +49,47 @@ public class Launcher : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom(createdRoomName.text);
         MenuManager.Instance.OpenMenu("loadingMenu");
     }
-
-    public override void OnJoinedRoom()
-    {
-        MenuManager.Instance.CloseAllOpenMenus();
-        PhotonNetwork.LoadLevel(1); //name or number of scene here
-        //pos player new Vector3(36.7000008f,0.699999988f,0f)
-        //.Instantiate(playerPrefab.name,
-            //new Vector3(36.7000008f, 0.699999988f, 0f), Quaternion.identity);
-    }
-
+    
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         errorText.text = "Room creation failed with message: " + message;
         MenuManager.Instance.OpenMenu("errorMenu");
     }
-
-    public void LeaveRoom()
+    
+    public void JoinRoom(RoomInfo info)
     {
-        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.JoinRoom(info.Name);
         MenuManager.Instance.OpenMenu("loadingMenu");
     }
-
-    public override void OnLeftRoom()
-    {
-        MenuManager.Instance.OpenMenu("mainMenu");
-    }
-
+    
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         foreach (Transform t in roomListContent)
         {
             Destroy(t.gameObject);
         }
-        
-        foreach (var t in roomList)
+
+        foreach (var t in roomList.Where(t => !t.RemovedFromList))
         {
             Instantiate(roomListItemPrefab,
                 roomListContent).GetComponent<RoomListItem>().SetUp(t);
         }
     }
 
-    public void JoinRoom(RoomInfo info)
+    public override void OnJoinedRoom()
     {
-        PhotonNetwork.JoinRoom(info.Name);
-        MenuManager.Instance.OpenMenu("loadingMenu");
+        MenuManager.Instance.CloseAllOpenMenus();
+        PhotonNetwork.LoadLevel(1); //name or number of scene here
     }
 
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        errorText.text = "Room join failed with message: " + message;
+        MenuManager.Instance.OpenMenu("errorMenu");
+    }
+
+    /** other utilities **/
+    
     public void Quit()
     {
 #if UNITY_EDITOR

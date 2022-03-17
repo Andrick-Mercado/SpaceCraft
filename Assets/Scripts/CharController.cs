@@ -36,12 +36,14 @@ public class CharController : MonoBehaviour
     
     //for multiplayer
     private PhotonView _view;
+    private bool _paused;
 
 
     private void Awake()
     {
         //get photon view component
         _view = GetComponent<PhotonView>();
+        _paused = false;
     }
 
     void Start()
@@ -56,7 +58,7 @@ public class CharController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         
-        //setting up camera for multiplayer
+        //delete unnecessary gameObjects from other players on your scene 
         if (!_view.IsMine)
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
@@ -64,10 +66,19 @@ public class CharController : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
+    private void Update()
     {
-        //prevent other players from moving others
+        //prevent other players from opening your pause menu
         if (!_view.IsMine) return;
+
+        PauseGame();
+        
+    }
+
+    private void FixedUpdate()
+    {
+        //prevent other players from moving others or if game is paused
+        if (!_view.IsMine || _paused) return;
         
         //Get transform position for forward and right based on current direction facing
         Vector3 forward = transform.TransformDirection(Vector3.forward);
@@ -160,6 +171,29 @@ public class CharController : MonoBehaviour
         {
             camAtPlayer = true;
             playerCamera.transform.localPosition = new Vector3(0, 2, 5);
+        }
+    }
+
+    private void PauseGame()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (_paused)
+            {
+                MenuManager.Instance.CloseMenu("pauseMenu");
+                _paused = false;
+
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+            else
+            {
+                MenuManager.Instance.OpenMenu("pauseMenu");
+                _paused = true;
+                
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+            }
         }
     }
 }
