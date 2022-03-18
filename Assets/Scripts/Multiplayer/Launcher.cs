@@ -23,7 +23,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     /** CONNECTING TO LOBBY = SERVER **/
     private void Start()
     {
-        //if(!PhotonNetwork.IsConnected) //if code used between scenes uncomment
+        if(!PhotonNetwork.IsConnected) //for when player leaves a room
             PhotonNetwork.ConnectUsingSettings();
     }
     
@@ -69,7 +69,13 @@ public class Launcher : MonoBehaviourPunCallbacks
             Destroy(t.gameObject);
         }
 
-        foreach (var t in roomList.Where(t => !t.RemovedFromList))
+        // foreach (var t in roomList.Where(t => !t.RemovedFromList))
+        // {
+        //     Instantiate(roomListItemPrefab,
+        //         roomListContent).GetComponent<RoomListItem>().SetUp(t);
+        // }
+
+        foreach (var t in roomList.Where(t => !t.RemovedFromList || !t.IsOpen))
         {
             Instantiate(roomListItemPrefab,
                 roomListContent).GetComponent<RoomListItem>().SetUp(t);
