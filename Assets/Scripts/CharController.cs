@@ -39,6 +39,8 @@ public class CharController : MonoBehaviour
     private bool _paused;
 
 
+    public GameObject player_Head;
+
     private void Awake()
     {
         //get photon view component
@@ -53,6 +55,7 @@ public class CharController : MonoBehaviour
         //grab reference to the Character's rigidbody
         rb = GetComponent<Rigidbody>();
 
+        
 
         //Locks and makes Mouse Cursor invisible when focused on game window
         Cursor.lockState = CursorLockMode.Locked;
@@ -106,8 +109,10 @@ public class CharController : MonoBehaviour
         //Move Character
         //calculate desired movement direction from input
         Vector3 movementImpulse = (forward* Input.GetAxis("Vertical") + right* Input.GetAxis("Horizontal"));
+
         if (movementImpulse.magnitude > 1)
             movementImpulse.Normalize();
+
         //decide on player speed
         if (Input.GetKey(runKey))
         {
@@ -117,11 +122,13 @@ public class CharController : MonoBehaviour
         {
             movementImpulse *= walkSpeed * Time.fixedDeltaTime;
         }
+
         //decide on gravity direction
         Vector3 gravityVector = Vector3.zero;
         gravityVector = transform.TransformDirection(Vector3.down);
         gravityVector = Vector3.Scale(gravityVector, rb.velocity);
         gravityVector -= gravity * transform.up;
+
         //apply jump velocity
         if (Input.GetKey(jumpKey)){
             gravityVector += jumpSpeed * transform.up;
@@ -144,8 +151,13 @@ public class CharController : MonoBehaviour
                 playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 180, 0);
             }
             else playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+
+            //Rotate Players Head on X axis (Up/Down)
+            player_Head.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+
             //Rotate Player Character on Y axis
-            rotationY += Input.GetAxis("Mouse X") * camSpeed;
+            //rotationY += Input.GetAxis("Mouse X") * camSpeed;
+
             Vector3 up = (transform.position - closestMass.position).normalized;
             transform.rotation *= Quaternion.Euler(new Vector3(0, Input.GetAxis("Mouse X") * camSpeed,0));
             //make the player' bottom point towards the ground
@@ -154,7 +166,8 @@ public class CharController : MonoBehaviour
             //Vector3 LookAt = Vector3.Cross(up, -transform.right) + up;
             //rb.transform.LookAt(LookAt, up);
         }
-                    //First Person
+        
+        //First Person
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             camAtPlayer = false;
@@ -195,5 +208,10 @@ public class CharController : MonoBehaviour
                 Cursor.lockState = CursorLockMode.None;
             }
         }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        Debug.Log(collision.gameObject.name);
     }
 }

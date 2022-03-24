@@ -60,6 +60,7 @@ MonoBehaviour:
   jumpKey: 32
   playerCamera: {fileID: 1767980585851749910}
   canMove: 1
+  player_Head: {fileID: 1767980585877624059}
 --- !u!114 &9155223872309843206
 MonoBehaviour:
   m_ObjectHideFlags: 0
