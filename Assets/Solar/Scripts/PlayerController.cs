@@ -107,7 +107,7 @@ public class PlayerController : GravityObject {
 
 	void Update () 
 	{
-		if (!_view.IsMine) return;
+		if (!_view.IsMine) return;//prevent other players from using this script
 		
 		HandleMovement ();
 		PauseGame();

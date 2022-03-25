@@ -5,16 +5,16 @@ using UnityEngine;
 public class RoomListItem : MonoBehaviour
 {
     [SerializeField] private TMP_Text text;
-    private RoomInfo _info;
+    public RoomInfo info;
     
     public void SetUp(RoomInfo info)
     {
-        _info = info;
+        this.info = info;
         text.text = info.Name;
     }
 
     public void OnClick()
     {
-        Launcher.Instance.JoinRoom(_info);
+        Launcher.Instance.JoinRoom(info);
     }
 }
