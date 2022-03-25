@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class PlayerController : GravityObject {
@@ -56,6 +58,10 @@ public class PlayerController : GravityObject {
 	bool readyToFlyShip;
 	bool debug_playerFrozen;
 	Animator animator;
+	
+	//for multiplayer
+	private PhotonView _view;
+	private bool _paused;
 
 	void Awake () {
 		cam = GetComponentInChildren<Camera> ();
@@ -76,6 +82,19 @@ public class PlayerController : GravityObject {
 		FindObjectOfType<EndlessManager>().playerCamera = GetComponentInChildren<Camera>();
 		FindObjectOfType<LODHandler>().cam= GetComponentInChildren<Camera>();
 		FindObjectOfType<LODHandler>().camT = GetComponentInChildren<Camera>().transform;
+		
+		//get photon view component
+		_view = GetComponent<PhotonView>();
+		_paused = false;
+	}
+
+	private void Start()
+	{
+		if (!_view.IsMine)
+		{
+			Destroy(GetComponentInChildren<Camera>().gameObject);
+			Destroy(rb);
+		}
 	}
 
 	void InitRigidbody () {
@@ -86,11 +105,20 @@ public class PlayerController : GravityObject {
 		rb.mass = mass;
 	}
 
-	void Update () {
+	void Update () 
+	{
+		if (!_view.IsMine) return;
+		
 		HandleMovement ();
+		PauseGame();
+		
 	}
 
-	void HandleMovement () {
+	void HandleMovement () 
+	{
+		//prevent other players from moving others or if game is paused
+		if (!_view.IsMine || _paused) return;
+		
 		HandleEditorInput ();
 		// Look input
 		yaw += Input.GetAxisRaw ("Mouse X") * mouseSensitivity;
@@ -235,6 +263,29 @@ public class PlayerController : GravityObject {
 	public Rigidbody Rigidbody {
 		get {
 			return rb;
+		}
+	}
+	
+	private void PauseGame()
+	{
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			if (_paused)
+			{
+				MenuManager.Instance.CloseMenu("pauseMenu");
+				_paused = false;
+
+				Cursor.visible = false;
+				Cursor.lockState = CursorLockMode.Locked;
+			}
+			else
+			{
+				MenuManager.Instance.OpenMenu("pauseMenu");
+				_paused = true;
+                
+				Cursor.visible = true;
+				Cursor.lockState = CursorLockMode.None;
+			}
 		}
 	}
 
