@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 [ExecuteInEditMode]
 public class LODHandler : MonoBehaviour {
@@ -26,12 +27,15 @@ public class LODHandler : MonoBehaviour {
 				generators[i] = bodies[i].GetComponentInChildren<CelestialBodyGenerator> ();
 			}
 		}
+		
+		cam = Camera.main;
+		if (cam is not null) camT = cam.transform;
 	}
 
 	void Update () {
 		DebugLODInfo ();
 
-		if (Application.isPlaying) {
+		if (Application.isPlaying && cam != null) {
 			HandleLODs ();
 		}
 
@@ -68,11 +72,15 @@ public class LODHandler : MonoBehaviour {
 		}
 	}
 
-	float CalculateScreenHeight (CelestialBody body) {
-		if (cam == null) {
-			cam = Camera.main;
-			camT = cam.transform;
-		}
+	float CalculateScreenHeight (CelestialBody body)
+	{
+		
+		// if (cam == null) {
+		// 	cam = Camera.main;
+		// 	camT = cam.transform;
+		// }
+		
+		
 		Quaternion originalRot = camT.rotation;
 		Vector3 bodyCentre = body.transform.position;
 		camT.LookAt (bodyCentre);

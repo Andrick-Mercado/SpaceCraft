@@ -44,6 +44,13 @@ public class CharController : MonoBehaviour
         //get photon view component
         _view = GetComponent<PhotonView>();
         _paused = false;
+        
+        //delete unnecessary gameObjects from other players on your scene 
+        if (!_view.IsMine)
+        {
+            Destroy(GetComponentInChildren<Camera>().gameObject);
+            Destroy(rb);
+        }
     }
 
     void Start()
@@ -58,12 +65,6 @@ public class CharController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         
-        //delete unnecessary gameObjects from other players on your scene 
-        if (!_view.IsMine)
-        {
-            Destroy(GetComponentInChildren<Camera>().gameObject);
-            Destroy(rb);
-        }
     }
 
     private void Update()

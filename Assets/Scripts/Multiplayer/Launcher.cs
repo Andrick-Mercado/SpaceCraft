@@ -4,7 +4,6 @@ using ExitGames.Client.Photon.StructWrapping;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
-using UnityEngine.SceneManagement;
 using TMPro;
 
 public class Launcher : MonoBehaviourPunCallbacks
@@ -39,7 +38,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         MenuManager.Instance.OpenMenu("mainMenu");
-        //PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
+        PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
     }
 
     /** Creating/Joining ROOMS  **/
@@ -75,28 +74,24 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         foreach (var t in roomList.Where(t => !t.RemovedFromList || !t.IsOpen))
         {
-            Instantiate(roomListItemPrefab,
-                roomListContent).GetComponent<RoomListItem>().SetUp(t);
+            Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(t);
         }
     }
 
     public override void OnJoinedRoom()
     {
         MenuManager.Instance.OpenMenu("readyUpMenu");
-        
-        //PhotonNetwork.LoadLevel(1); //name or number of scene here
-        
-        
-        Player[] players = PhotonNetwork.PlayerList;
 
-        foreach (Transform child in playerListContent)
-        {
-            Destroy(child.gameObject);
-        }
+        Player[] players = PhotonNetwork.PlayerList;
         
-        foreach (var t in players)
+         foreach (Transform child in playerListContent)
+         {
+             Destroy(child.gameObject);
+         }
+        
+        foreach(Player p in players)
         {
-             Instantiate(playerListItemPrefab, playerListContent).Get<PlayerListItem>().SetUp(t);
+            Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(p);
         }
     }
 
@@ -108,7 +103,12 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        Instantiate(playerListItemPrefab, playerListContent).Get<PlayerListItem>().SetUp(newPlayer);
+        Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(newPlayer);
+    }
+
+    public void StartGame()
+    {
+        PhotonNetwork.LoadLevel(1);
     }
 
     public void LeaveRoom()
