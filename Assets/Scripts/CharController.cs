@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class CharController : MonoBehaviour
@@ -11,17 +13,19 @@ public class CharController : MonoBehaviour
     public float gravity = 20f;
     public float camSpeed = 2f;
     public float lookUpDownLimit = 45f;
-
-
-
+    public float acceleration;
+    private Rigidbody rb;
+    public Transform closestMass;
+    public KeyCode runKey;
+    public KeyCode jumpKey;
     //Grab reference to player Camera
     public Camera playerCamera;
     //Declare reference to character controller inspector component
-    CharacterController characterController;
 
     //Vars used to calculate Camera and Player movement
     Vector3 moveDirection = Vector3.zero;
     float rotationX = 0;
+    float rotationY = 0;
     float curSpeedX;
     float curSpeedY;
 
@@ -29,23 +33,56 @@ public class CharController : MonoBehaviour
     public bool canMove = true;
 
     bool camAtPlayer = false;
+    
+    //for multiplayer
+    private PhotonView _view;
+    private bool _paused;
+
+
+    private void Awake()
+    {
+        //get photon view component
+        _view = GetComponent<PhotonView>();
+        _paused = false;
+    }
 
     void Start()
     {
-        //Grab reference to character controller component
-        characterController = GetComponent<CharacterController>();
+        //closestMass
+        closestMass = GameObject.Find("Planet").transform;
+        //grab reference to the Character's rigidbody
+        rb = GetComponent<Rigidbody>();
+
 
         //Locks and makes Mouse Cursor invisible when focused on game window
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        
+        //delete unnecessary gameObjects from other players on your scene 
+        if (!_view.IsMine)
+        {
+            Destroy(GetComponentInChildren<Camera>().gameObject);
+            Destroy(rb);
+        }
     }
 
-    void Update()
+    private void Update()
     {
+        //prevent other players from opening your pause menu
+        if (!_view.IsMine) return;
+
+        PauseGame();
+        
+    }
+
+    private void FixedUpdate()
+    {
+        //prevent other players from moving others or if game is paused
+        if (!_view.IsMine || _paused) return;
+        
         //Get transform position for forward and right based on current direction facing
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
-        
 
         //If canMove, if playing holding shift, apply running speed, else, apply walking speed
         if (canMove)
@@ -66,28 +103,33 @@ public class CharController : MonoBehaviour
             curSpeedX = curSpeedY = 0;
         }
 
-        float movementDirectionY = moveDirection.y;
-        moveDirection = (forward * curSpeedX) + (right * curSpeedY);
-
-        //If able to move and not on ground and input = jump, make char jump, else, char is moving on ground
-        if (Input.GetButton("Jump") && canMove && characterController.isGrounded)
+        //Move Character
+        //calculate desired movement direction from input
+        Vector3 movementImpulse = (forward* Input.GetAxis("Vertical") + right* Input.GetAxis("Horizontal"));
+        if (movementImpulse.magnitude > 1)
+            movementImpulse.Normalize();
+        //decide on player speed
+        if (Input.GetKey(runKey))
         {
-            moveDirection.y = jumpSpeed;
+            movementImpulse *= runSpeed * Time.fixedDeltaTime;
         }
         else
         {
-            moveDirection.y = movementDirectionY;
+            movementImpulse *= walkSpeed * Time.fixedDeltaTime;
         }
-
-        //If Char not on ground, apply gravity
-        if (!characterController.isGrounded)
-        {
-            moveDirection.y -= gravity * Time.deltaTime;
+        //decide on gravity direction
+        Vector3 gravityVector = Vector3.zero;
+        gravityVector = transform.TransformDirection(Vector3.down);
+        gravityVector = Vector3.Scale(gravityVector, rb.velocity);
+        gravityVector -= gravity * transform.up;
+        //apply jump velocity
+        if (Input.GetKey(jumpKey)){
+            gravityVector += jumpSpeed * transform.up;
         }
+        //apply movement and gravity
+        rb.velocity = movementImpulse+gravityVector;
 
-        //Move Character
-        characterController.Move(moveDirection * Time.deltaTime);
-
+    
         //Camera Rotations
         if (canMove)
         {
@@ -103,25 +145,55 @@ public class CharController : MonoBehaviour
             }
             else playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
             //Rotate Player Character on Y axis
-            transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * camSpeed, 0);
+            rotationY += Input.GetAxis("Mouse X") * camSpeed;
+            Vector3 up = (transform.position - closestMass.position).normalized;
+            transform.rotation *= Quaternion.Euler(new Vector3(0, Input.GetAxis("Mouse X") * camSpeed,0));
+            //make the player' bottom point towards the ground
+            transform.rotation = Quaternion.FromToRotation(transform.up, up) * transform.rotation;
+            
+            //Vector3 LookAt = Vector3.Cross(up, -transform.right) + up;
+            //rb.transform.LookAt(LookAt, up);
         }
-        //First Person
+                    //First Person
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             camAtPlayer = false;
-            playerCamera.transform.localPosition = new Vector3(0,1,0);
+            playerCamera.transform.localPosition = new Vector3(0, 1, 0);
         }
         //Third Person
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             camAtPlayer = false;
-            playerCamera.transform.localPosition = new Vector3(0,2,-5);
+            playerCamera.transform.localPosition = new Vector3(0, 2, -5);
         }
         //Third Person Looking at Character
         else if (Input.GetKey(KeyCode.Alpha3))
         {
             camAtPlayer = true;
             playerCamera.transform.localPosition = new Vector3(0, 2, 5);
+        }
+    }
+
+    private void PauseGame()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (_paused)
+            {
+                MenuManager.Instance.CloseMenu("pauseMenu");
+                _paused = false;
+
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+            else
+            {
+                MenuManager.Instance.OpenMenu("pauseMenu");
+                _paused = true;
+                
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+            }
         }
     }
 }
