@@ -11,6 +11,7 @@ public class CelestialBody : GravityObject {
     public float surfaceGravity;
     public Vector3 initialVelocity;
     public string bodyName = "Unnamed";
+    public bool lockPosition=true;
     Transform meshHolder;
 
     public Vector3 velocity { get; private set; }
@@ -25,6 +26,8 @@ public class CelestialBody : GravityObject {
     }
 
     public void UpdateVelocity (CelestialBody[] allBodies, float timeStep) {
+        if (lockPosition)
+            return;
         foreach (var otherBody in allBodies) {
             if (otherBody != this) {
                 float sqrDst = (otherBody.rb.position - rb.position).sqrMagnitude;
@@ -37,10 +40,17 @@ public class CelestialBody : GravityObject {
     }
 
     public void UpdateVelocity (Vector3 acceleration, float timeStep) {
+        if (lockPosition)
+        {
+            velocity = Vector3.zero;
+            return;
+        }
         velocity += acceleration * timeStep;
     }
 
     public void UpdatePosition (float timeStep) {
+        if (lockPosition)
+            return;
         rb.MovePosition (rb.position + velocity * timeStep);
 
     }
