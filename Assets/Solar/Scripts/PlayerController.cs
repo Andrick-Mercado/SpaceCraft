@@ -107,7 +107,7 @@ public class PlayerController : GravityObject {
 
 	void Update () 
 	{
-		if (!_view.IsMine) return;
+		if (!_view.IsMine) return;//prevent other players from using this script
 		
 		HandleMovement ();
 		PauseGame();
@@ -198,7 +198,10 @@ public class PlayerController : GravityObject {
 		return grounded;
 	}
 
-	void FixedUpdate () {
+	void FixedUpdate ()
+	{
+		if (rb == null) return;
+		
 		CelestialBody[] bodies = NBodySimulation.Bodies;
 		Vector3 gravityOfNearestBody = Vector3.zero;
 		float nearestSurfaceDst = float.MaxValue;
