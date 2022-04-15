@@ -70,7 +70,7 @@ public class Launcher : MonoBehaviourPunCallbacks
             Destroy(t.gameObject);
         }
 
-        foreach (var t in roomList.Where(t => !t.RemovedFromList || !t.IsOpen))
+        foreach (var t in roomList.Where(t => !t.RemovedFromList ))//|| !t.IsOpen))
         {
             Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(t);
         }
@@ -87,13 +87,10 @@ public class Launcher : MonoBehaviourPunCallbacks
         StartGame();
     }
 
-    
-    public void StartGame()
+    private void StartGame()
     {
         PhotonNetwork.LoadLevel(1);
     }
-
-    
     
     /** other utilities **/
     
