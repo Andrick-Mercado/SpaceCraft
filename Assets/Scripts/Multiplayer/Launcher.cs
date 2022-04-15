@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using ExitGames.Client.Photon.StructWrapping;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -14,8 +13,6 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] private TMP_Text errorText;
     [SerializeField] private Transform roomListContent;
     [SerializeField] private GameObject roomListItemPrefab;
-    [SerializeField] private Transform playerListContent;
-    [SerializeField] private GameObject playerListItemPrefab;
 
     private void Awake()
     {
@@ -38,7 +35,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         MenuManager.Instance.OpenMenu("mainMenu");
-        PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
+        //PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
     }
 
     /** Creating/Joining ROOMS  **/
@@ -61,8 +58,9 @@ public class Launcher : MonoBehaviourPunCallbacks
     
     public void JoinRoom(RoomInfo info)
     {
-        PhotonNetwork.JoinRoom(info.Name);
         MenuManager.Instance.OpenMenu("loadingMenu");
+        PhotonNetwork.JoinRoom(info.Name);
+        
     }
     
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
@@ -78,50 +76,24 @@ public class Launcher : MonoBehaviourPunCallbacks
         }
     }
 
-    public override void OnJoinedRoom()
-    {
-        MenuManager.Instance.OpenMenu("readyUpMenu");
-
-        Player[] players = PhotonNetwork.PlayerList;
-        
-         foreach (Transform child in playerListContent)
-         {
-             Destroy(child.gameObject);
-         }
-        
-        foreach(Player p in players)
-        {
-            Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(p);
-        }
-    }
-
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
         errorText.text = "Room join failed with message: " + message;
         MenuManager.Instance.OpenMenu("errorMenu");
     }
-
-    public override void OnPlayerEnteredRoom(Player newPlayer)
+    public override void OnJoinedRoom()
     {
-        Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(newPlayer);
+        MenuManager.Instance.OpenMenu("loadingMenu");
+        StartGame();
     }
 
+    
     public void StartGame()
     {
         PhotonNetwork.LoadLevel(1);
     }
 
-    public void LeaveRoom()
-    {
-        PhotonNetwork.LeaveRoom();
-        MenuManager.Instance.OpenMenu("loadingMenu");
-
-    }
-
-    public override void OnLeftRoom()
-    {
-        MenuManager.Instance.OpenMenu("mainMenu");
-    }
+    
     
     /** other utilities **/
     
