@@ -29,7 +29,7 @@ public class LODHandler : MonoBehaviour {
 		}
 		
 		cam = Camera.main;
-		if (cam is not null) camT = cam.transform;
+		if (cam != null) camT = cam.transform;
 	}
 
 	void Update () {
