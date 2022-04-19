@@ -90,6 +90,7 @@ public class PlayerController : GravityObject {
 
 	private void Start()
 	{
+		if(_view)
 		if (!_view.IsMine)
 		{
 			Destroy(GetComponentInChildren<Camera>().gameObject);
@@ -107,7 +108,8 @@ public class PlayerController : GravityObject {
 
 	void Update () 
 	{
-		if (!_view.IsMine) return;//prevent other players from using this script
+		if (_view)
+			if (!_view.IsMine) return;//prevent other players from using this script
 		
 		HandleMovement ();
 		PauseGame();
@@ -116,8 +118,9 @@ public class PlayerController : GravityObject {
 
 	void HandleMovement () 
 	{
-		//prevent other players from moving others or if game is paused
-		if (!_view.IsMine || _paused) return;
+		if (_view)
+			//prevent other players from moving others or if game is paused
+			if (!_view.IsMine || _paused) return;
 		
 		HandleEditorInput ();
 		// Look input
