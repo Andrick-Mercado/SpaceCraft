@@ -21,7 +21,7 @@ public class PlayerManager : MonoBehaviour
     //spawns in the player prefab at a given location
     private static void CreateController()
     {
-        PhotonNetwork.Instantiate(Path.Combine("Player"),
+        PhotonNetwork.Instantiate(Path.Combine("Player/Player"),
             new Vector3(36.7000008f, 0.699999988f, 0f), Quaternion.identity);
     }
 }

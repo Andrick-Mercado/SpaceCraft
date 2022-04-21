@@ -36,7 +36,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         if (scene.buildIndex == 1 )
         {
-            PhotonNetwork.Instantiate(Path.Combine("PlayerManager"),
+            PhotonNetwork.Instantiate(Path.Combine("Player/Managers/PlayerManager"),
                 Vector3.zero, Quaternion.identity);
         }
     }

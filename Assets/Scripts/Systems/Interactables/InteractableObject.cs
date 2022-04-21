@@ -102,6 +102,7 @@ public class InteractableObject : MonoBehaviour
     private void InteractionCompleted()
     {
         Debug.Log("Collected item: "+ configSO.Name);
+        tempScript.Instance.UpdateInventory(configSO.Name);
         AllowInteraction = false;
         promptGroup.alpha = _targetAlpha = 0f;
         OnInteractionCompleted.Invoke();
