@@ -25,14 +25,8 @@ public class BrokenShipPieceLauncher : MonoBehaviour
             {
                 currentSuccessfulAttemps++;
                 Instantiate(ShipPiecePrefab, hit.point, Quaternion.AngleAxis(0, hit.normal)).transform.parent=gameObject.transform;
-
-                
             }
             
         }
-    }
-    // Update is called once per frame
-    void Update()
-    {
     }
 }
