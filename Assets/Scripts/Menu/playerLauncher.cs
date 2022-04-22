@@ -1,4 +1,5 @@
 using Photon.Pun;
+using UnityEngine.SceneManagement;
 
 public class playerLauncher : MonoBehaviourPunCallbacks
 {
@@ -17,6 +18,7 @@ public class playerLauncher : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {
-        PhotonNetwork.LoadLevel(0);
+        //PhotonNetwork.LoadLevel(0);
+        SceneManager.LoadScene(0);
     }
 }

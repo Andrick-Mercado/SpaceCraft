@@ -32,11 +32,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    private static void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
         if (scene.buildIndex == 1 )
         {
-            PhotonNetwork.Instantiate(Path.Combine("PlayerManager"),
+            PhotonNetwork.Instantiate(Path.Combine("Player/Managers/PlayerManager"),
                 Vector3.zero, Quaternion.identity);
         }
     }

@@ -3,7 +3,6 @@ using System.Linq;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
-using UnityEngine.SceneManagement;
 using TMPro;
 
 public class Launcher : MonoBehaviourPunCallbacks
@@ -23,7 +22,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     /** CONNECTING TO LOBBY = SERVER **/
     private void Start()
     {
-        //if(!PhotonNetwork.IsConnected) //if code used between scenes uncomment
+        if(!PhotonNetwork.IsConnected) //for when player leaves a room
             PhotonNetwork.ConnectUsingSettings();
     }
     
@@ -36,6 +35,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         MenuManager.Instance.OpenMenu("mainMenu");
+        //PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
     }
 
     /** Creating/Joining ROOMS  **/
@@ -58,8 +58,9 @@ public class Launcher : MonoBehaviourPunCallbacks
     
     public void JoinRoom(RoomInfo info)
     {
-        PhotonNetwork.JoinRoom(info.Name);
         MenuManager.Instance.OpenMenu("loadingMenu");
+        PhotonNetwork.JoinRoom(info.Name);
+        
     }
     
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
@@ -69,17 +70,10 @@ public class Launcher : MonoBehaviourPunCallbacks
             Destroy(t.gameObject);
         }
 
-        foreach (var t in roomList.Where(t => !t.RemovedFromList))
+        foreach (var t in roomList.Where(t => !t.RemovedFromList ))//|| !t.IsOpen))
         {
-            Instantiate(roomListItemPrefab,
-                roomListContent).GetComponent<RoomListItem>().SetUp(t);
+            Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(t);
         }
-    }
-
-    public override void OnJoinedRoom()
-    {
-        MenuManager.Instance.CloseAllOpenMenus();
-        PhotonNetwork.LoadLevel(1); //name or number of scene here
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
@@ -87,7 +81,17 @@ public class Launcher : MonoBehaviourPunCallbacks
         errorText.text = "Room join failed with message: " + message;
         MenuManager.Instance.OpenMenu("errorMenu");
     }
+    public override void OnJoinedRoom()
+    {
+        MenuManager.Instance.OpenMenu("loadingMenu");
+        StartGame();
+    }
 
+    private void StartGame()
+    {
+        PhotonNetwork.LoadLevel(1);
+    }
+    
     /** other utilities **/
     
     public void Quit()

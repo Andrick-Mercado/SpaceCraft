@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class CharController : MonoBehaviour
 {
-    //Declare reference to character controller inspector component
     //Movement/Camera properties
     public float walkSpeed = 7f;
     public float runSpeed = 11f;
@@ -21,40 +20,37 @@ public class CharController : MonoBehaviour
     public KeyCode jumpKey;
     //Grab reference to player Camera
     public Camera playerCamera;
-
-
-    float fallMult = 2.5f;
+    //Declare reference to character controller inspector component
 
     //Vars used to calculate Camera and Player movement
     Vector3 moveDirection = Vector3.zero;
     float rotationX = 0;
-    float rotationY;
+    float rotationY = 0;
     float curSpeedX;
     float curSpeedY;
 
     //Bool to use in future to dictate when player is not allowed to move
     public bool canMove = true;
 
-    //Bool to determine if the camera should be facing towards player. Used 
     bool camAtPlayer = false;
-
-    //Bool to track if player is touching the surface of a planet
-    private bool isGrounded;
     
     //for multiplayer
     private PhotonView _view;
     private bool _paused;
 
-    //Var to hold Head GameObject of Player Prefab. Used rotate Head up/down seperate of body
-    public Transform player_Head;
 
     private void Awake()
     {
         //get photon view component
         _view = GetComponent<PhotonView>();
         _paused = false;
-
         
+        //delete unnecessary gameObjects from other players on your scene 
+        if (!_view.IsMine)
+        {
+            Destroy(GetComponentInChildren<Camera>().gameObject);
+            Destroy(rb);
+        }
     }
 
     void Start()
@@ -64,19 +60,11 @@ public class CharController : MonoBehaviour
         //grab reference to the Character's rigidbody
         rb = GetComponent<Rigidbody>();
 
-        //Grab Reference of Players Head to Rotate up/down in Update method
-        player_Head = this.transform.Find("Capsule_Player").transform.Find("Player_Head");        
 
         //Locks and makes Mouse Cursor invisible when focused on game window
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         
-        //delete unnecessary gameObjects from other players on your scene 
-        if (!_view.IsMine)
-        {
-            Destroy(GetComponentInChildren<Camera>().gameObject);
-            Destroy(rb);
-        }
     }
 
     private void Update()
@@ -119,10 +107,8 @@ public class CharController : MonoBehaviour
         //Move Character
         //calculate desired movement direction from input
         Vector3 movementImpulse = (forward* Input.GetAxis("Vertical") + right* Input.GetAxis("Horizontal"));
-
         if (movementImpulse.magnitude > 1)
             movementImpulse.Normalize();
-
         //decide on player speed
         if (Input.GetKey(runKey))
         {
@@ -132,44 +118,35 @@ public class CharController : MonoBehaviour
         {
             movementImpulse *= walkSpeed * Time.fixedDeltaTime;
         }
-
         //decide on gravity direction
         Vector3 gravityVector = Vector3.zero;
         gravityVector = transform.TransformDirection(Vector3.down);
         gravityVector = Vector3.Scale(gravityVector, rb.velocity);
         gravityVector -= gravity * transform.up;
-
         //apply jump velocity
         if (Input.GetKey(jumpKey)){
             gravityVector += jumpSpeed * transform.up;
         }
-        
+        //apply movement and gravity
+        rb.velocity = movementImpulse+gravityVector;
 
     
         //Camera Rotations
         if (canMove)
         {
-            //apply movement and gravity
-            rb.velocity = movementImpulse + gravityVector;
-
             //Calculate X rotation movement
             rotationX += -Input.GetAxis("Mouse Y") * camSpeed;
             //Calculate X rotation clamp so character doesent bend neck backwards or into self
             rotationX = Mathf.Clamp(rotationX, -lookUpDownLimit, lookUpDownLimit);
 
-            //Rotate Camera on X axis. If camera set to face player, rotate camera 180 degrees, else, keep camera facing default
+            //Rotate Camera on X axis
             if (camAtPlayer)
             {
                 playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 180, 0);
             }
             else playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
-
-            //Rotate Players Head on X axis (Up/Down)
-            player_Head.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
-
             //Rotate Player Character on Y axis
-            //rotationY += Input.GetAxis("Mouse X") * camSpeed;
-
+            rotationY += Input.GetAxis("Mouse X") * camSpeed;
             Vector3 up = (transform.position - closestMass.position).normalized;
             transform.rotation *= Quaternion.Euler(new Vector3(0, Input.GetAxis("Mouse X") * camSpeed,0));
             //make the player' bottom point towards the ground
@@ -178,8 +155,7 @@ public class CharController : MonoBehaviour
             //Vector3 LookAt = Vector3.Cross(up, -transform.right) + up;
             //rb.transform.LookAt(LookAt, up);
         }
-        
-        //First Person
+                    //First Person
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             camAtPlayer = false;
@@ -219,26 +195,6 @@ public class CharController : MonoBehaviour
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
             }
-        }
-    }
-
-    private void OnCollisionStay(Collision collision)
-    {
-        
-        //If the player is touching the surface of the planet, set isGrounded to true
-        if (collision.gameObject.name == "Planet")
-        {
-            isGrounded = true;
-        }
-        
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        //If the player leaves the "Planet"'s collision, set isGrounded to false
-        if (collision.gameObject.name == "Planet")
-        {
-            isGrounded = false;
         }
     }
 }
