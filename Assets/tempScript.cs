@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
@@ -29,17 +27,17 @@ public class tempScript : MonoBehaviour
         if (item == "Mineral")
         {
             _mineralCount++;
-            _view.RPC("UpdateInventoryMultiplayer", RpcTarget.AllBuffered, _mineralCount, _flintCount, _treeCount);
+            _view.RPC(nameof(UpdateInventoryMultiplayer), RpcTarget.AllBuffered, _mineralCount, _flintCount, _treeCount);
         }
         else if (item == "Flint")
         {
             _flintCount++;
-            _view.RPC("UpdateInventoryMultiplayer", RpcTarget.AllBuffered, _mineralCount, _flintCount, _treeCount);
+            _view.RPC(nameof(UpdateInventoryMultiplayer), RpcTarget.AllBuffered, _mineralCount, _flintCount, _treeCount);
         }
         else if (item == "Tree")
         {
             _treeCount++;
-            _view.RPC("UpdateInventoryMultiplayer", RpcTarget.AllBuffered, _mineralCount, _flintCount, _treeCount);
+            _view.RPC(nameof(UpdateInventoryMultiplayer), RpcTarget.AllBuffered, _mineralCount, _flintCount, _treeCount);
         }
     }
 

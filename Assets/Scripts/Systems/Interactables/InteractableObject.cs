@@ -76,14 +76,14 @@ public class InteractableObject : MonoBehaviour
         {
             if (configSO.InteractionTime <= 0 )
             {
-                _view.RPC("InteractionCompleted", RpcTarget.AllBuffered);
+                _view.RPC(nameof(InteractionCompleted), RpcTarget.AllBuffered);
                 return;
             }
             
             _interactionProgress += Time.deltaTime / configSO.InteractionTime;
             if (_interactionProgress >= 1f )
             {
-                _view.RPC("InteractionCompleted", RpcTarget.AllBuffered);
+                _view.RPC(nameof(InteractionCompleted), RpcTarget.AllBuffered);
                 return;                                
             }
             
