@@ -124,8 +124,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 68399193801419599}
-  - component: {fileID: 3025912507556162739}
   - component: {fileID: 2034055327023698012}
+  - component: {fileID: -3101138518386031552}
+  - component: {fileID: 2014501255971014067}
+  - component: {fileID: 4608266110118382923}
+  - component: {fileID: 5137321624763908760}
   m_Layer: 0
   m_Name: Boid
   m_TagString: Untagged
@@ -150,24 +153,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3025912507556162739
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5314415108215690934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dce6077f18e5a6489ccf18e2787517c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  velocity: {x: 0, y: 0, z: 0}
-  newVelocity: {x: 0, y: 0, z: 0}
-  newPosition: {x: 0, y: 0, z: 0}
-  neighbors: []
-  collisionRisks: []
-  closest: {fileID: 0}
 --- !u!96 &2034055327023698012
 TrailRenderer:
   serializedVersion: 2
@@ -267,6 +252,77 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!54 &-3101138518386031552
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5314415108215690934}
+  serializedVersion: 2
+  m_Mass: 25
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 112
+  m_CollisionDetection: 3
+--- !u!65 &2014501255971014067
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5314415108215690934}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.4682496, y: 1, z: 3.3608606}
+  m_Center: {x: -0.029059052, y: 0, z: 0.025600076}
+--- !u!114 &4608266110118382923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5314415108215690934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dce6077f18e5a6489ccf18e2787517c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetVelocity: {x: 0, y: 0, z: 0}
+  walkableMask:
+    serializedVersion: 2
+    m_Bits: 0
+  PlayerPrefab: {fileID: 0}
+  moveSpeed: 5
+  rb: {fileID: 0}
+  feet: {fileID: 68399193801419599}
+--- !u!114 &5137321624763908760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5314415108215690934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &5735950085957637756
 GameObject:
   m_ObjectHideFlags: 0
