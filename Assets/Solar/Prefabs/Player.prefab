@@ -346,7 +346,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 8
   runSpeed: 12
-  jumpForce: 8
+  jumpForce: 16
   vSmoothTime: 0.1
   airSmoothTime: 0.5
   stickToGroundForce: 0.5
