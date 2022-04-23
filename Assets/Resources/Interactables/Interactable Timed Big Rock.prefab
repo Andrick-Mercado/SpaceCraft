@@ -96,6 +96,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7443100284736490307, guid: 63549d2780ccbc7488617c65d1262eac, type: 3}
+      propertyPath: m_Radius
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7443100284736490307, guid: 63549d2780ccbc7488617c65d1262eac, type: 3}
+      propertyPath: m_Center.y
+      value: 0.75
+      objectReference: {fileID: 0}
     - target: {fileID: 7443100284736490308, guid: 63549d2780ccbc7488617c65d1262eac, type: 3}
       propertyPath: m_Name
       value: Interactable Timed Big Rock
@@ -144,9 +152,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7443100285210920336, guid: 63549d2780ccbc7488617c65d1262eac, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7443100285210920336, guid: 63549d2780ccbc7488617c65d1262eac, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7443100285210920336, guid: 63549d2780ccbc7488617c65d1262eac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7443100285228114246, guid: 63549d2780ccbc7488617c65d1262eac, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1.5
+      value: 1.76
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 63549d2780ccbc7488617c65d1262eac, type: 3}
