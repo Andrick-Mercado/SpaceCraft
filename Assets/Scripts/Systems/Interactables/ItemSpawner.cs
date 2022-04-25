@@ -1,99 +1,109 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using System.IO;
 using Photon.Pun;
-using Unity.VisualScripting;
-using UnityEngine.PlayerLoop;
+using Random = UnityEngine.Random;
 
 public class ItemSpawner : MonoBehaviour
 {
     [Header("Dependencies")]
     [SerializeField] [Tooltip("Use only prefabs in the resources folder")]
     private GameObject objectToSpawn;
+    [SerializeField] [Tooltip("Planet for the objets to face gravity")]
+    private GameObject planetToSpawnInObject;
 
     [Header("Settings for Spawner")] 
-    [SerializeField] [Range(0f,360f)]
-    private int offsetRotation;
-    [SerializeField] 
-    private AxisRotation onAxis;
+    [SerializeField] [Range(-10f, 50f)]
+    private float offsetPositionUp;
     [SerializeField]
     private float rayCastRange;
     [SerializeField]
     private float numberOfSpawnedObjects;
-    [SerializeField]
-    private LayerMask layersToFind;
-    
-    private enum AxisRotation 
-    {
-        Default,
-        Back,
-        Forward,
-        Down,
-        Up,
-        Left,
-        Right
-    }
-    
-    //inner methods
-    private PhotonView _view;
-    private Vector3 _onAxis;
-    
+    [SerializeField] 
+    private float lateStartTime;
+    [SerializeField] 
+    private LayerMask layersThatPreventSpawning;
+
+    [Header("Settings for Offline")]
+    [SerializeField] private bool runOffline;
+
+
+    private string _objectToSpawnTag;
     private void Awake()
     {
-        _view = GetComponent<PhotonView>();
-        
-        AxisSetUp();
+        _objectToSpawnTag = planetToSpawnInObject.transform.tag;
     }
+
     private void Start()
     {
-        if (PhotonNetwork.IsMasterClient)
+        if (!PhotonNetwork.IsConnected && runOffline)
         {
-            StartCoroutine(LateStart(0.1f));
+            SpawnObjectsOffline();
         }
+        else if (PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine(LateStartOnline(lateStartTime));
+        }
+
+        
     }
     
-    private IEnumerator LateStart(float waitTime)
+    private IEnumerator LateStartOnline(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
         
         float currentSuccessfulAttemps = 0;
         while (currentSuccessfulAttemps < numberOfSpawnedObjects)
         {
-            if (Physics.Raycast(transform.position, Random.onUnitSphere, out var hit, rayCastRange, layersToFind))
+            if (Physics.Raycast(transform.position, Random.onUnitSphere,
+                    out var hit, rayCastRange, ~layersThatPreventSpawning) && hit.transform.CompareTag(_objectToSpawnTag))
             {
+                Debug.Log(hit.transform.tag);
                 currentSuccessfulAttemps++;
-                PhotonNetwork.Instantiate(Path.Combine("Interactables/"+objectToSpawn.name),
-                    hit.point, Quaternion.AngleAxis(offsetRotation,
-                        _onAxis == Vector3.zero ?  hit.normal: _onAxis)).transform.parent=gameObject.transform;//hit.normal
+                Transform obj = PhotonNetwork.Instantiate(Path.Combine("Interactables/" + objectToSpawn.name),
+                    hit.point, Quaternion.identity).transform;
+                
+                obj.parent = gameObject.transform;
+                
+                Vector3 gravityUp = (obj.position - planetToSpawnInObject.transform.position).normalized;
+                Vector3 localUp = obj.transform.up;
+                
+                obj.rotation = Quaternion.FromToRotation(localUp, gravityUp) * obj.rotation;
+                obj.localPosition += new Vector3(0f, offsetPositionUp, 0f);
             }
         }
     }
 
-    private void AxisSetUp()
+    [ContextMenu("Spawn Objects for Offline")]
+    private void SpawnObjectsOffline()
     {
-        switch (onAxis)
+        if(Application.isPlaying)
+            StartCoroutine(LateStartOffline(lateStartTime));
+    }
+    
+    private IEnumerator LateStartOffline(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        
+        float currentSuccessfulAttemps = 0;
+        while (currentSuccessfulAttemps < numberOfSpawnedObjects)
         {
-            case AxisRotation.Default:
-                _onAxis = Vector3.zero;
-                break;
-            case AxisRotation.Back:
-                _onAxis = Vector3.back;
-                break;
-            case AxisRotation.Forward:
-                _onAxis = Vector3.forward;
-                break;
-            case AxisRotation.Down:
-                _onAxis = Vector3.down;
-                break;
-            case AxisRotation.Up:
-                _onAxis = Vector3.up;
-                break;
-            case AxisRotation.Left:
-                _onAxis = Vector3.left;
-                break;
-            case AxisRotation.Right:
-                _onAxis = Vector3.right;
-                break;
+            if (Physics.Raycast(transform.position, Random.onUnitSphere,
+                    out var hit, rayCastRange, ~layersThatPreventSpawning) && hit.transform.CompareTag(_objectToSpawnTag))
+            {
+                currentSuccessfulAttemps++;
+                Transform obj = Instantiate(objectToSpawn,
+                    hit.point, Quaternion.identity).transform;
+                
+                obj.parent = gameObject.transform;
+
+                Vector3 gravityUp = ( obj.position - planetToSpawnInObject.transform.position ).normalized;
+                Vector3 localUp = obj.transform.up;
+
+                obj.rotation = Quaternion.FromToRotation(localUp, gravityUp) * obj.rotation;
+                obj.localPosition += new Vector3(0f, offsetPositionUp, 0f);
+            }
         }
     }
 }
