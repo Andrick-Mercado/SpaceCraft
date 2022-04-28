@@ -10,14 +10,16 @@ public class Boid : MonoBehaviour
 
 
     public GameObject PlayerPrefab;
-    CelestialBody referenceBody;
+    public CelestialBody referenceBody;
 
-    
     public float moveSpeed;
+    public int spawnPlanetPadding;
 
     public Rigidbody rb;
 
     public Transform feet;
+
+
 
     CelestialBody[] bodies;
     Vector3 gravityOfNearestBody;
@@ -40,26 +42,25 @@ public class Boid : MonoBehaviour
         foreach ( Renderer r in rends ) {
             r.material.color = randColor;
         }
-
+        
     }
-
+    
     private void Start()
     {
-        //CelestialBody startBody = FindObjectOfType<GameSetUp>().startBody;
         CalculateGravity();
-        
+
+        //CelestialBody startBody = FindObjectOfType<GameSetUp>().startBody;
         //Vector3 pointAbovePlanet = referenceBody.transform.position + Vector3.right * referenceBody.radius * 1.1f;
         //Vector3 awayFromPlanet = transform.position - referenceBody.transform.position;
         //awayFromPlanet = -awayFromPlanet.normalized;
-        
+        Debug.Log("BoidStart");
         Vector3 disAway = transform.position - referenceBody.transform.position;
-        
-        if(disAway.magnitude < referenceBody.radius)
+        if (disAway.magnitude < referenceBody.radius)
         {
             int count = 0;
-            while(disAway.magnitude < referenceBody.radius + 25)
+            while(disAway.magnitude < referenceBody.radius + spawnPlanetPadding)
             {
-                Debug.Log("Boid from Planet Radius: " + disAway.magnitude);
+                //Debug.Log("Boid from Planet Radius: " + disAway.magnitude);
                 transform.position += transform.up * 5f;
                 disAway = transform.position - referenceBody.transform.position;
                 if (count > 10)
@@ -68,12 +69,24 @@ public class Boid : MonoBehaviour
                 }
                 count++;
             }
+            disAway = transform.position - referenceBody.transform.position;
+            if(Physics.Raycast(transform.position, -transform.up, out var hit, 10000f))
+            {
+ 
+                Debug.DrawLine(transform.position, hit.point, Color.white, 10000f);
+                Debug.Log(hit.transform.name);
+                Debug.Log("Distance: " + (transform.position - hit.point).magnitude);
+
+            }
+            
+            
+            
         }
     }
 
     // Update is called once per frame
     void Update () {
-        HandleMovement();
+        //HandleMovement();
         
     }
 
@@ -83,7 +96,7 @@ public class Boid : MonoBehaviour
         CalculateGravity();
 
         // Move
-        rb.MovePosition(rb.position + targetVelocity * Time.fixedDeltaTime);
+        //rb.MovePosition(rb.position + targetVelocity * Time.fixedDeltaTime);
         
     }
 
@@ -99,7 +112,7 @@ public class Boid : MonoBehaviour
             float sqrDst = (body.Position - rb.position).sqrMagnitude;
             Vector3 forceDir = (body.Position - rb.position).normalized;
             Vector3 acceleration = forceDir * Universe.gravitationalConstant * body.mass / sqrDst;
-            rb.AddForce(acceleration, ForceMode.Acceleration);
+            //rb.AddForce(acceleration, ForceMode.Acceleration);
 
             float dstToSurface = Mathf.Sqrt(sqrDst) - body.radius;
 
@@ -115,6 +128,7 @@ public class Boid : MonoBehaviour
         // Rotate to align with gravity up
         Vector3 gravityUp = -gravityOfNearestBody.normalized;
         rb.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * rb.rotation;
+        transform.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * transform.rotation;
     }
 
     void HandleMovement()

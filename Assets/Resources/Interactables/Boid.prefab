@@ -298,7 +298,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   PlayerPrefab: {fileID: 0}
+  referenceBody: {fileID: 0}
   moveSpeed: 5
+  spawnPlanetPadding: 15
   rb: {fileID: 0}
   feet: {fileID: 68399193801419599}
 --- !u!114 &5137321624763908760
