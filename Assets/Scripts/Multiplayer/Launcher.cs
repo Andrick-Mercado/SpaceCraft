@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using NaughtyAttributes;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -9,10 +10,14 @@ public class Launcher : MonoBehaviourPunCallbacks
 {
     public static Launcher Instance;
     
+    [Header("Dependencies")]
     [SerializeField] private TMP_InputField createdRoomName;
     [SerializeField] private TMP_Text errorText;
     [SerializeField] private Transform roomListContent;
     [SerializeField] private GameObject roomListItemPrefab;
+
+    [Header("Settings")] [SerializeField, Scene]
+    private string sceneToLoad;
 
     private void Awake()
     {
@@ -89,7 +94,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     private void StartGame()
     {
-        PhotonNetwork.LoadLevel(1);
+        PhotonNetwork.LoadLevel(sceneToLoad);
     }
     
     /** other utilities **/
