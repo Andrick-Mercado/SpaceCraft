@@ -72,19 +72,7 @@ public class Boid : MonoBehaviour
         disAway = transform.position - referenceBody.transform.position;
         Debug.Log("planet: " + referenceBody.transform.name);
 
-        Vector3 dirOfPlanet = (referenceBody.transform.position - transform.position);
-        //Debug.DrawLine(transform.position, referenceBody.transform.position, Color.green, 10000f);
-        Debug.DrawRay(transform.position, dirOfPlanet, Color.red, 9999f);
-        if (Physics.Raycast(transform.position, dirOfPlanet, out var hit, 10000f))
-        {
- 
-            //Debug.DrawLine(transform.position, hit.point, Color.white, 10000f);
-            //Debug.Log(hit.transform.name);
-            //Debug.Log("Distance: " + (transform.position - hit.point).magnitude);
-
-
-
-        }
+       
             
             
             
@@ -93,6 +81,7 @@ public class Boid : MonoBehaviour
 
     // Update is called once per frame
     void Update () {
+        
         HandleMovement();
         
     }
@@ -101,10 +90,20 @@ public class Boid : MonoBehaviour
     void FixedUpdate() {
 
         CalculateGravity();
+        Vector3 dirOfPlanet = (referenceBody.transform.position - transform.position);
+        //Debug.DrawLine(transform.position, referenceBody.transform.position, Color.green, 10000f);
+        //Debug.DrawRay(transform.position, dirOfPlanet, Color.red, 9999f);
+        if (Physics.Raycast(transform.position, dirOfPlanet, out var hit, 10000f))
+        {
+            dirOfPlanet = (hit.point - transform.position);
+            rb.velocity = transform.forward * moveSpeed / Time.fixedDeltaTime;
+            rb.velocity = Vector3.ClampMagnitude(rb.velocity, moveSpeed + 50);
 
+
+        }
         // Move
-        rb.MovePosition(rb.position + targetVelocity * Time.fixedDeltaTime);
-        
+        //rb.MovePosition(rb.position + targetVelocity * Time.fixedDeltaTime);
+
     }
 
     void CalculateGravity()
@@ -119,7 +118,7 @@ public class Boid : MonoBehaviour
             float sqrDst = (body.Position - rb.position).sqrMagnitude;
             Vector3 forceDir = (body.Position - rb.position).normalized;
             Vector3 acceleration = forceDir * Universe.gravitationalConstant * body.mass / sqrDst;
-            rb.AddForce(acceleration, ForceMode.Acceleration);
+            //rb.AddForce(acceleration, ForceMode.Acceleration);
 
             float dstToSurface = Mathf.Sqrt(sqrDst) - body.radius;
 
@@ -134,7 +133,7 @@ public class Boid : MonoBehaviour
 
         // Rotate to align with gravity up
         Vector3 gravityUp = -gravityOfNearestBody.normalized;
-        //rb.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * rb.rotation;
+        rb.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * rb.rotation;
         //transform.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * transform.rotation;
     }
 
