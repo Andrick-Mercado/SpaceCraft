@@ -55,33 +55,35 @@ public class Boid : MonoBehaviour
         //awayFromPlanet = -awayFromPlanet.normalized;
         Debug.Log("BoidStart");
         Vector3 disAway = transform.position - referenceBody.transform.position;
-        if (disAway.magnitude < referenceBody.radius)
+        
+        
+        int count = 0;
+        while(disAway.magnitude < referenceBody.radius + spawnPlanetPadding)
         {
-            int count = 0;
-            while(disAway.magnitude < referenceBody.radius + spawnPlanetPadding)
-            {
-                //Debug.Log("Boid from Planet Radius: " + disAway.magnitude);
-                transform.position += transform.up * 5f;
-                disAway = transform.position - referenceBody.transform.position;
-                if (count > 10)
-                {
-                    break;
-                }
-                count++;
-            }
+            //Debug.Log("Boid from Planet Radius: " + disAway.magnitude);
+            transform.position += transform.up * 5f;
             disAway = transform.position - referenceBody.transform.position;
-            if(Physics.Raycast(transform.position, -transform.up, out var hit, 10000f))
+            if (count > 10)
             {
- 
-                Debug.DrawLine(transform.position, hit.point, Color.white, 10000f);
-                Debug.Log(hit.transform.name);
-                Debug.Log("Distance: " + (transform.position - hit.point).magnitude);
-
+                break;
             }
-            
-            
-            
+            count++;
         }
+        disAway = transform.position - referenceBody.transform.position;
+        Debug.Log("planet: " + referenceBody.transform.name);
+        Debug.DrawLine(transform.position, transform.up, Color.white, 10000f);
+        if (Physics.Raycast(transform.position, referenceBody.transform.position, out var hit, 10000f))
+        {
+ 
+            Debug.DrawLine(transform.position, hit.point, Color.white, 10000f);
+            //Debug.Log(hit.transform.name);
+            //Debug.Log("Distance: " + (transform.position - hit.point).magnitude);
+
+        }
+            
+            
+            
+        
     }
 
     // Update is called once per frame
@@ -128,7 +130,7 @@ public class Boid : MonoBehaviour
         // Rotate to align with gravity up
         Vector3 gravityUp = -gravityOfNearestBody.normalized;
         rb.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * rb.rotation;
-        transform.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * transform.rotation;
+        //transform.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * transform.rotation;
     }
 
     void HandleMovement()
