@@ -1,9 +1,14 @@
+using NaughtyAttributes;
 using Photon.Pun;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class playerLauncher : MonoBehaviourPunCallbacks
 {
     public static playerLauncher Instance;
+
+    [Header("Settings")] [SerializeField, Scene]
+    private string sceneToLoad;
     
     private void Awake()
     {
@@ -19,6 +24,6 @@ public class playerLauncher : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         //PhotonNetwork.LoadLevel(0);
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(sceneToLoad);
     }
 }

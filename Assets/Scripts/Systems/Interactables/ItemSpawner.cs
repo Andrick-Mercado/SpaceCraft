@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using System.IO;
+using NaughtyAttributes;
 using Photon.Pun;
 using Random = UnityEngine.Random;
 
@@ -12,9 +13,7 @@ public class ItemSpawner : MonoBehaviour
     [SerializeField] [Tooltip("Planet for the objets to face gravity")]
     private GameObject planetToSpawnInObject;
 
-    [Header("Settings for Spawner")] 
-    [SerializeField] [Range(-10f, 50f)]
-    private float offsetPositionUp;
+    [Header("Settings for Spawner")]
     [SerializeField]
     private float rayCastRange;
     [SerializeField]
@@ -25,6 +24,9 @@ public class ItemSpawner : MonoBehaviour
     private LayerMask layersThatPreventSpawning;
 
     [Header("Settings for Offline")]
+    [Tooltip("Change offset position relative to local up or y")]
+    [SerializeField] [Range(-10f, 50f)] 
+    private float offsetPositionUp;
     [SerializeField] private bool runOffline;
 
     //inner methods
@@ -60,28 +62,26 @@ public class ItemSpawner : MonoBehaviour
                     out var hit, rayCastRange, ~layersThatPreventSpawning) && hit.transform.CompareTag(_objectToSpawnTag))
             {
                 currentSuccessfulAttemps++;
-                //Transform obj = PhotonNetwork.Instantiate(Path.Combine("Interactables/" + objectToSpawn.name),
-                //hit.point, Quaternion.identity).transform;
-                // obj.parent = gameObject.transform;
-                //
-                // Vector3 gravityUp = (obj.position - planetToSpawnInObject.transform.position).normalized;
-                // Vector3 localUp = obj.transform.up;
-                //
-                // obj.rotation = Quaternion.FromToRotation(localUp, gravityUp) * obj.rotation;
-                // obj.localPosition += new Vector3(0f, offsetPositionUp, 0f);
-                
-                PhotonNetwork.Instantiate(Path.Combine("Interactables/" + objectToSpawn.name),
-                    hit.point, Quaternion.FromToRotation(hit.transform.up,
-                        (hit.point - planetToSpawnInObject.transform.position).normalized ) * hit.transform.rotation).transform.parent = gameObject.transform;
+
+                 PhotonNetwork.Instantiate(Path.Combine("Interactables/" + objectToSpawn.name),
+                     hit.point, Quaternion.FromToRotation(hit.transform.up,
+                         (hit.point - planetToSpawnInObject.transform.position).normalized ) * hit.transform.rotation).transform.parent = gameObject.transform;
+
             }
         }
     }
 
-    [ContextMenu("Spawn Objects for Offline")]
+    [Button("Spawn Objects offline")]
     private void SpawnObjectsOffline()
     {
-        if(Application.isPlaying)
+        if (Application.isPlaying)
+        {
             StartCoroutine(LateStartOffline(lateStartTime));
+        }
+        else
+        {
+            Debug.Log("Editor needs to be running to execute!");
+        }
     }
     
     private IEnumerator LateStartOffline(float waitTime)

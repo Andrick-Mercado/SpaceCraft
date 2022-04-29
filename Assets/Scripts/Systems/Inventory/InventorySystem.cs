@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using NaughtyAttributes;
 using UnityEngine;
 
 public class InventorySystem : MonoBehaviour
@@ -6,16 +9,19 @@ public class InventorySystem : MonoBehaviour
     public static InventorySystem Instance;
 
     [SerializeField] private List<InventoryItem> inventoryList;
-    
+
     public List<InventoryItem> inventory
     {
-        get { return inventoryList;}
+        get { return inventoryList; }
         private set { inventoryList = value; }
     }
+
     private Dictionary<InventoryItemData, InventoryItem> m_itemDictionary;
-    
+
     public delegate void UpdateInventoryEvent();
+
     public event UpdateInventoryEvent OnInventoryChangedEvent;
+
     private void Awake()
     {
         Instance = this;
@@ -29,6 +35,7 @@ public class InventorySystem : MonoBehaviour
         {
             return value;
         }
+
         return null;
     }
 
@@ -44,6 +51,7 @@ public class InventorySystem : MonoBehaviour
             inventory.Add(newItem);
             m_itemDictionary.Add(referenceData, newItem);
         }
+
         OnInventoryChangedEvent?.Invoke();
     }
 
@@ -59,6 +67,43 @@ public class InventorySystem : MonoBehaviour
                 m_itemDictionary.Remove(referenceData);
             }
         }
+
         OnInventoryChangedEvent?.Invoke();
     }
+
+    [Button("Clear Inventory")]
+    private void RemoveAll()
+    {
+        if (!Application.isPlaying)
+        {
+            Debug.Log("Only run when playing!");
+            return;
+        }
+        
+        if (m_itemDictionary == null || m_itemDictionary.Count == 0)
+        {
+            Debug.Log("Inventory is already empty!");
+            return;
+        }
+        InventoryItemData[] itemKeys = m_itemDictionary.Keys.ToArray();
+        InventoryItem[] itemValues = m_itemDictionary.Values.ToArray();
+        for (int i = 0; i < itemValues.Length; i++)
+        {
+            
+            while ( itemValues[i].stackSize > 0 )
+            {
+                itemValues[i].RemoveFromStack();
+        
+                if (itemValues[i].stackSize == 0)
+                {
+                    inventory.Remove(itemValues[i]);
+                    m_itemDictionary.Remove(itemKeys[i]);
+                }
+            }
+            OnInventoryChangedEvent?.Invoke();
+        }
+        
+        Debug.Log("Inventory is now empty!");
+    }
+    
 }
