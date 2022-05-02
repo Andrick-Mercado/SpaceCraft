@@ -294,13 +294,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dce6077f18e5a6489ccf18e2787517c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  velocity: {x: 0, y: 0, z: 0}
+  newVelocity: {x: 0, y: 0, z: 0}
+  newPosition: {x: 0, y: 0, z: 0}
+  neighbors: []
+  collisionRisks: []
+  closest: {fileID: 0}
   targetVelocity: {x: 0, y: 0, z: 0}
   walkableMask:
     serializedVersion: 2
     m_Bits: 0
   PlayerPrefab: {fileID: 0}
   referenceBody: {fileID: 0}
-  moveSpeed: 1
+  moveSpeed: 35
   spawnPlanetPadding: 15
   rb: {fileID: 0}
   feet: {fileID: 68399193801419599}

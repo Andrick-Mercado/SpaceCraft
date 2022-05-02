@@ -5,6 +5,15 @@ using UnityEngine;
 public class Boid : MonoBehaviour
 {
 
+    static public List<Boid> boids;
+
+
+    public Vector3 velocity;       // The current velocity
+    public List<Boid> neighbors;      // All nearby Boids
+    public List<Boid> collisionRisks; // All Boids that are too close
+    public Boid closest;        // The single closest Boid
+
+
     public Vector3 targetVelocity;
     public LayerMask walkableMask;
 
@@ -28,10 +37,19 @@ public class Boid : MonoBehaviour
     // Initialize this Boid on Awake()
     void Awake () {
 
-        rb = GetComponent<Rigidbody>();
+        
 
-        PlayerPrefab = GameObject.FindGameObjectWithTag("Player");
+        // Define the boids List if it is still null
+        if (boids == null)
+        {
+            boids = new List<Boid>();
+        }
+        // Add this Boid to boids
+        boids.Add(this);
 
+        // Initialize the two Lists
+        neighbors = new List<Boid>();
+        collisionRisks = new List<Boid>();
 
         // Give the Boid a random color
         Color randColor = Color.black;
@@ -47,21 +65,23 @@ public class Boid : MonoBehaviour
     
     private void Start()
     {
+        rb = GetComponent<Rigidbody>();
+
+        PlayerPrefab = GameObject.FindGameObjectWithTag("Player");
+
         CalculateGravity();
 
         //CelestialBody startBody = FindObjectOfType<GameSetUp>().startBody;
         //Vector3 pointAbovePlanet = referenceBody.transform.position + Vector3.right * referenceBody.radius * 1.1f;
         //Vector3 awayFromPlanet = transform.position - referenceBody.transform.position;
         //awayFromPlanet = -awayFromPlanet.normalized;
-        Debug.Log("BoidStart");
+
         Vector3 disAway = transform.position - referenceBody.transform.position;
-        
-        
         int count = 0;
         while(disAway.magnitude < referenceBody.radius + spawnPlanetPadding)
         {
             //Debug.Log("Boid from Planet Radius: " + disAway.magnitude);
-            transform.position += transform.up * 5f;
+            transform.position += transform.up * 2f;
             disAway = transform.position - referenceBody.transform.position;
             if (count > 10)
             {
@@ -70,20 +90,56 @@ public class Boid : MonoBehaviour
             count++;
         }
         disAway = transform.position - referenceBody.transform.position;
-        Debug.Log("planet: " + referenceBody.transform.name);
-
-       
-            
-            
-            
-        
+        //Debug.Log(disAway.magnitude);
+        //Debug.Log("planet: " + referenceBody.transform.name);
     }
 
     // Update is called once per frame
     void Update () {
-        
-        HandleMovement();
-        
+        //bool isGrounded = IsGrounded();
+
+        targetVelocity = rb.velocity;
+
+        // Get the list of potential nearby Boids
+        List<Boid> neighbors = GetNeighbors(this);
+
+        Debug.Log("# neighbors: " + neighbors.Count);
+        // If the Boid has neighbors, adjust directional vector for flocking
+        if(neighbors.Count != 0)
+        {
+            // Get average vel of neighbor boids
+            Vector3 neighborVel = GetAverageVelocity(neighbors);
+            // Adjust boid velocity to match better with surrounding boids
+            targetVelocity += neighborVel * BoidSpawner.S.velocityMatchingAmt;
+
+            // Flock towards center of neighbors
+            Vector3 neighborCenterOffset = GetAveragePosition(neighbors) - this.transform.position;
+            targetVelocity += neighborCenterOffset * BoidSpawner.S.flockCenteringAmt;
+
+            // Avoid running into Boids if collision risk
+            Vector3 dist;
+            if (collisionRisks.Count > 0)
+            {
+                Vector3 collisionAveragePos = GetAveragePosition(collisionRisks);
+                dist = collisionAveragePos - this.transform.position;
+                targetVelocity += dist * BoidSpawner.S.collisionAvoidanceAmt;
+            }
+
+        }
+        // Adjust the current velocity based on targetVelocity using a linear interpolation
+        velocity = (1 - BoidSpawner.S.velocityLerpAmt) * velocity + BoidSpawner.S.velocityLerpAmt * targetVelocity;
+
+        // Make sure boid velocity magnitude is within min and max limits
+        if (velocity.magnitude > BoidSpawner.S.maxVelocity)
+        {
+            velocity = velocity.normalized * BoidSpawner.S.maxVelocity;
+        }
+        if (velocity.magnitude < BoidSpawner.S.minVelocity)
+        {
+            velocity = velocity.normalized * BoidSpawner.S.minVelocity;
+        }
+
+
     }
 
     
@@ -95,14 +151,12 @@ public class Boid : MonoBehaviour
         //Debug.DrawRay(transform.position, dirOfPlanet, Color.red, 9999f);
         if (Physics.Raycast(transform.position, dirOfPlanet, out var hit, 10000f))
         {
+            
             dirOfPlanet = (hit.point - transform.position);
-            rb.velocity = transform.forward * moveSpeed / Time.fixedDeltaTime;
-            rb.velocity = Vector3.ClampMagnitude(rb.velocity, moveSpeed + 50);
-
-
+            rb.velocity = transform.forward + velocity * moveSpeed * Time.fixedDeltaTime;
+            //rb.velocity = Vector3.ClampMagnitude(rb.velocity, moveSpeed);
+            //Debug.Log("Boid Magn: " + rb.velocity.magnitude);
         }
-        // Move
-        //rb.MovePosition(rb.position + targetVelocity * Time.fixedDeltaTime);
 
     }
 
@@ -134,19 +188,9 @@ public class Boid : MonoBehaviour
         // Rotate to align with gravity up
         Vector3 gravityUp = -gravityOfNearestBody.normalized;
         rb.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * rb.rotation;
-        //transform.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * transform.rotation;
     }
 
-    void HandleMovement()
-    {     
-        // Movement
-        bool isGrounded = IsGrounded();
-        Vector3 dir = transform.forward;
-        
-        targetVelocity = transform.TransformDirection(dir.normalized) * moveSpeed;
-        
-
-    }
+  
     bool IsGrounded()
     {
         // Sphere must not overlay terrain at origin otherwise no collision will be detected
@@ -172,9 +216,58 @@ public class Boid : MonoBehaviour
         return grounded;
     }
 
-    public void SetVelocity(Vector3 velocity)
+    public List<Boid> GetNeighbors(Boid boi)
     {
-        rb.velocity = velocity;
+        float closestDist = float.MaxValue;
+        Vector3 delta;
+        float dist;
+        neighbors.Clear();
+        collisionRisks.Clear();
+
+        foreach (Boid b in boids)
+        {
+            if (b == boi) continue;
+            delta = b.transform.position - boi.transform.position;
+            dist = delta.magnitude;
+            if (dist < closestDist)
+            {
+                closestDist = dist;
+                closest = b;
+            }
+            if (dist < BoidSpawner.S.nearDist)
+            {
+                neighbors.Add(b);
+            }
+            if (dist < BoidSpawner.S.collisionDist)
+            {
+                collisionRisks.Add(b);
+            }
+        }
+        return (neighbors);
+    }
+
+    // Get the average position of the Boids in a List<Boid>
+    public Vector3 GetAveragePosition(List<Boid> someBoids)
+    {
+        Vector3 sum = Vector3.zero;
+        foreach (Boid b in someBoids)
+        {
+            sum += b.transform.position;
+        }
+        Vector3 center = sum / someBoids.Count;
+        return (center);
+    }
+
+    // Get the average velocity of the Boids in a List<Boid>
+    public Vector3 GetAverageVelocity(List<Boid> someBoids)
+    {
+        Vector3 sum = Vector3.zero;
+        foreach (Boid b in someBoids)
+        {
+            sum += b.rb.velocity;
+        }
+        Vector3 avg = sum / someBoids.Count;
+        return (avg);
     }
 
 
