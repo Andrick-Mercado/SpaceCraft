@@ -15,4 +15,10 @@ public class CollectGoal : Goal
         this.CurrAmt = currAmt;
         this.ReqAmt = reqAmt;
     }
+
+    public override void Init()
+    {
+        base.Init();
+        
+    }
 }
