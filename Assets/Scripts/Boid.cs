@@ -37,9 +37,6 @@ public class Boid : MonoBehaviour
 
     // Initialize this Boid on Awake()
     void Awake () {
-
-        
-
         // Define the boids List if it is still null
         if (boids == null)
         {
@@ -59,8 +56,17 @@ public class Boid : MonoBehaviour
         }
         Renderer[] rends = gameObject.GetComponentsInChildren<Renderer>();
         foreach ( Renderer r in rends ) {
-            r.material.color = randColor;
+            if (r.transform.name == "EyeL" || r.transform.name == "EyeR")
+            {
+                r.material.color = Color.black;
+            }
+            else
+            {
+                r.material.color = randColor;
+            }
+            
         }
+        
         
     }
     
@@ -162,7 +168,7 @@ public class Boid : MonoBehaviour
             if (playerToRayVec.magnitude > BoidSpawner.S.maxDistancefromPlanet)
             {
                 //Debug.Log("TOO HIGH: " + (hit.point - transform.position).magnitude);
-                //Debug.DrawRay(transform.position, dirOfPlanet, Color.red, 20);
+                //Debug.DrawRay(transform.position, dirOfPlanet, Color.white, 20);
                 rb.AddForce(-transform.up * BoidSpawner.S.moveSpeed, ForceMode.Force);
             }
             else if(playerToRayVec.magnitude < BoidSpawner.S.minDistancefromPlanet)
