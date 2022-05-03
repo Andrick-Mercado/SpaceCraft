@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "250310756830",
+    "project_id": "spacecraft-46d0b",
+    "storage_bucket": "spacecraft-46d0b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:250310756830:android:17b295a3c8e785e4d1354f",
+        "android_client_info": {
+          "package_name": "com.aces.spacecraft"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "250310756830-h5v063a8fno1g13o3gdqphd310h84t9k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSZy6CPGhfYMzI43wiM7VOO6ycMyMfxho"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "250310756830-h5v063a8fno1g13o3gdqphd310h84t9k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
