@@ -26,7 +26,16 @@ public class InventorySystem : MonoBehaviour
     {
         Instance = this;
         inventory = new List<InventoryItem>();
+        var database = FindObjectOfType<DatabaseInterface>();
+        
         m_itemDictionary = new Dictionary<InventoryItemData, InventoryItem>();
+        if (database)
+        {
+            foreach (InventoryItem i in database.loggedInUser.inventory)
+            {
+                Add(i.data);
+            }
+        }
     }
 
     public InventoryItem Get(InventoryItemData referenceData)

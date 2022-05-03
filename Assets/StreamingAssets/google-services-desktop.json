@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "250310756830",
+    "firebase_url": "https://spacecraft-46d0b-default-rtdb.firebaseio.com/",
     "project_id": "spacecraft-46d0b",
     "storage_bucket": "spacecraft-46d0b.appspot.com"
   },

@@ -1765,7 +1765,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dca286931b69d794e8e590e336d5ee56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerName: 
+  loggedInUser:
+    username: 
+    inventory: []
   registerInput: {fileID: 236458618}
   loginInput: {fileID: 626330622}
 --- !u!4 &1038985083

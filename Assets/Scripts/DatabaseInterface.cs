@@ -12,6 +12,7 @@ public class DatabaseInterface : MonoBehaviour
     string snapshot="";
     public TMP_InputField registerInput;
     public TMP_InputField loginInput;
+    public GameObject MenuCover;
     void Start()
     {
         //GetDatabaseSnapshot();
@@ -82,7 +83,23 @@ public class DatabaseInterface : MonoBehaviour
     }
     public void LoadNextScene()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        MenuCover.SetActive(false);
+    }
+    void OnApplicationQuit()
+    {
+        save();
+    }
+    public void save()
+    {
+        InventorySystem inventorySystem = FindObjectOfType<InventorySystem>();
+        if (inventorySystem)
+        {
+            loggedInUser.inventory = inventorySystem.inventory;
+            string json = JsonUtility.ToJson(loggedInUser);
+            FirebaseDatabase.GetInstance("https://spacecraft-46d0b-default-rtdb.firebaseio.com/")
+        .RootReference.Child(loggedInUser.username).SetRawJsonValueAsync(json);
+        }
     }
     [System.Serializable]
     public class User
