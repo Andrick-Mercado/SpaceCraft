@@ -295,8 +295,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocity: {x: 0, y: 0, z: 0}
-  newVelocity: {x: 0, y: 0, z: 0}
-  newPosition: {x: 0, y: 0, z: 0}
   neighbors: []
   collisionRisks: []
   closest: {fileID: 0}

@@ -24,6 +24,7 @@ public class Boid : MonoBehaviour
     public float moveSpeed;
     public int spawnPlanetPadding;
 
+
     public Rigidbody rb;
 
     public Transform feet;
@@ -97,13 +98,12 @@ public class Boid : MonoBehaviour
     // Update is called once per frame
     void Update () {
         //bool isGrounded = IsGrounded();
-
         targetVelocity = rb.velocity;
 
         // Get the list of potential nearby Boids
         List<Boid> neighbors = GetNeighbors(this);
 
-        Debug.Log("# neighbors: " + neighbors.Count);
+        //Debug.Log("# neighbors: " + neighbors.Count);
         // If the Boid has neighbors, adjust directional vector for flocking
         if(neighbors.Count != 0)
         {
@@ -129,33 +129,61 @@ public class Boid : MonoBehaviour
         // Adjust the current velocity based on targetVelocity using a linear interpolation
         velocity = (1 - BoidSpawner.S.velocityLerpAmt) * velocity + BoidSpawner.S.velocityLerpAmt * targetVelocity;
 
+        
         // Make sure boid velocity magnitude is within min and max limits
-        if (velocity.magnitude > BoidSpawner.S.maxVelocity)
+        // Only used in dynamic boid speeds
+        /*if (velocity.magnitude > BoidSpawner.S.maxVelocity)
         {
             velocity = velocity.normalized * BoidSpawner.S.maxVelocity;
         }
         if (velocity.magnitude < BoidSpawner.S.minVelocity)
         {
             velocity = velocity.normalized * BoidSpawner.S.minVelocity;
-        }
-
-
+        }*/
     }
 
     
     void FixedUpdate() {
-
         CalculateGravity();
+
         Vector3 dirOfPlanet = (referenceBody.transform.position - transform.position);
         //Debug.DrawLine(transform.position, referenceBody.transform.position, Color.green, 10000f);
         //Debug.DrawRay(transform.position, dirOfPlanet, Color.red, 9999f);
+
         if (Physics.Raycast(transform.position, dirOfPlanet, out var hit, 10000f))
         {
+            //Normalized direction vector for flocking behavior
+            velocity = velocity.normalized;
+
+            //Apply flocking vector to forward movement and move speed.
+            Vector3 movementVec = transform.forward + velocity * BoidSpawner.S.moveSpeed * Time.fixedDeltaTime;
+
+            Vector3 playerToRayVec = (hit.point - transform.position);
+            if (playerToRayVec.magnitude > BoidSpawner.S.maxDistancefromPlanet)
+            {
+                //Debug.Log("TOO HIGH: " + (hit.point - transform.position).magnitude);
+                //Debug.DrawRay(transform.position, dirOfPlanet, Color.red, 20);
+                rb.AddForce(-transform.up * BoidSpawner.S.moveSpeed, ForceMode.Force);
+            }
+            else if(playerToRayVec.magnitude < BoidSpawner.S.minDistancefromPlanet)
+            {
+                //Debug.DrawRay(transform.position, dirOfPlanet, Color.red, 20);
+                //Debug.Log("TOO LOW: " + playerToRayVec.magnitude);
+                rb.AddForce(transform.up * BoidSpawner.S.moveSpeed, ForceMode.Force);
+            }
             
-            dirOfPlanet = (hit.point - transform.position);
-            rb.velocity = transform.forward + velocity * moveSpeed * Time.fixedDeltaTime;
+            //Apply resulting velocity vector to players rigidbody
+            rb.velocity = movementVec;
             //rb.velocity = Vector3.ClampMagnitude(rb.velocity, moveSpeed);
-            //Debug.Log("Boid Magn: " + rb.velocity.magnitude);
+
+            //Rotation after finding direction vector to rotate object towards velocity vector
+            rb.rotation = Quaternion.FromToRotation(transform.forward, rb.velocity.normalized) * rb.rotation;
+            //transform.rotation = Quaternion.LookRotation(rb.velocity); 
+        }
+        else
+        {
+            Debug.Log("BOID RAYCAST FAIL");
+            CalculateGravity();
         }
 
     }
