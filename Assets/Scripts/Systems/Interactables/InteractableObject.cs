@@ -8,9 +8,8 @@ using UnityEngine.Serialization;
 
 public class InteractableObject : MonoBehaviour
 {
-    [Header("Dependencies")] [SerializeField]
-    private TextMeshProUGUI objectName;
-
+    [Header("Dependencies")] 
+    [SerializeField] private TextMeshProUGUI objectName;
     [SerializeField] private TextMeshProUGUI description;
     [SerializeField] private TextMeshProUGUI inputPrompt;
     [SerializeField] private Image activationProgress;
@@ -76,14 +75,14 @@ public class InteractableObject : MonoBehaviour
         {
             if (configSO.InteractionTime <= 0 )
             {
-                _view.RPC("InteractionCompleted", RpcTarget.AllBuffered);
+                _view.RPC(nameof(InteractionCompleted), RpcTarget.AllBuffered);
                 return;
             }
             
             _interactionProgress += Time.deltaTime / configSO.InteractionTime;
             if (_interactionProgress >= 1f )
             {
-                _view.RPC("InteractionCompleted", RpcTarget.AllBuffered); //this needs to be called to update all of the players (when I first call the quest) Note how it needs to be added
+                _view.RPC(nameof(InteractionCompleted), RpcTarget.AllBuffered);
                 return;                                
             }
             
@@ -98,14 +97,21 @@ public class InteractableObject : MonoBehaviour
         }
     }
 
-    [PunRPC] //updates for all the players
+    [PunRPC]
     private void InteractionCompleted()
     {
-        Debug.Log("Collected item: "+ configSO.Name);
-        tempScript.Instance.UpdateInventory(configSO.Name);
-        AllowInteraction = false;
-        promptGroup.alpha = _targetAlpha = 0f;
-        OnInteractionCompleted.Invoke();
-        Destroy(gameObject);
+        Debug.Log("Interacted with: "+ configSO.Name);
+        
+        //only added to our inventory if its an inventory item and delete it afterwards
+        if (TryGetComponent<ItemObject>(out ItemObject itemObject))
+        {
+            itemObject.OnHandlePickupItem();
+            AllowInteraction = false;
+            promptGroup.alpha = _targetAlpha = 0f;
+            OnInteractionCompleted.Invoke();
+            Destroy(gameObject);
+        }
+        
+        //here we can add other interaction systems
     }
 }

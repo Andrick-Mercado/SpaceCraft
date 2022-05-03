@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 720389684864406494}
   - component: {fileID: 720389684864406489}
-  - component: {fileID: 720389684864406488}
+  - component: {fileID: 8664243006504013458}
   m_Layer: 0
   m_Name: ItemSpawner
   m_TagString: Untagged
@@ -45,13 +45,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab370a120ce1ce14f89e5d86c619f019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectToSpawn: {fileID: 0}
+  planetToSpawnInObject: {fileID: 0}
+  offsetPositionUp: 0
   rayCastRange: 100000
   numberOfSpawnedObjects: 20
-  layersToFind:
+  lateStartTime: 0
+  layersThatPreventSpawning:
     serializedVersion: 2
-    m_Bits: 2147483647
-  objectToSpawn: {fileID: 0}
---- !u!114 &720389684864406488
+    m_Bits: 0
+  runOffline: 0
+--- !u!114 &8664243006504013458
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

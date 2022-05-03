@@ -637,6 +637,7 @@ GameObject:
   - component: {fileID: 5693781447903804176}
   - component: {fileID: 7854783029865849448}
   - component: {fileID: 6385917100269197051}
+  - component: {fileID: 3910083511854880598}
   m_Layer: 8
   m_Name: Interactable Timed Tree
   m_TagString: Untagged
@@ -720,6 +721,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.38, y: 3.91, z: 0.47}
   m_Center: {x: 0, y: 2, z: 0}
+--- !u!114 &3910083511854880598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5693781447903804182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 279b884bf74989e44978793aa216af27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  referenceItem: {fileID: 11400000, guid: dc59ed8644bdd0b41be4b5559082b977, type: 2}
 --- !u!1 &5693781448252405185
 GameObject:
   m_ObjectHideFlags: 0

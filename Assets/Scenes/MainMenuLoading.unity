@@ -789,6 +789,7 @@ MonoBehaviour:
   errorText: {fileID: 134344179}
   roomListContent: {fileID: 1210400077}
   roomListItemPrefab: {fileID: 1912861000405858459, guid: 014d860e8a901f443bc3a63e04978ebe, type: 3}
+  sceneToLoad: More Planets Solar System multiplayer
 --- !u!1 &470842978
 GameObject:
   m_ObjectHideFlags: 0

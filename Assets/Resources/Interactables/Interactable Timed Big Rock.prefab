@@ -96,6 +96,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7443100284736490306, guid: 63549d2780ccbc7488617c65d1262eac, type: 3}
+      propertyPath: itemObject
+      value: 
+      objectReference: {fileID: 5336056216787909255}
+    - target: {fileID: 7443100284736490307, guid: 63549d2780ccbc7488617c65d1262eac, type: 3}
+      propertyPath: m_Radius
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7443100284736490307, guid: 63549d2780ccbc7488617c65d1262eac, type: 3}
+      propertyPath: m_Center.y
+      value: 0.75
+      objectReference: {fileID: 0}
     - target: {fileID: 7443100284736490308, guid: 63549d2780ccbc7488617c65d1262eac, type: 3}
       propertyPath: m_Name
       value: Interactable Timed Big Rock
@@ -144,9 +156,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7443100285210920336, guid: 63549d2780ccbc7488617c65d1262eac, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7443100285210920336, guid: 63549d2780ccbc7488617c65d1262eac, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7443100285210920336, guid: 63549d2780ccbc7488617c65d1262eac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7443100285228114246, guid: 63549d2780ccbc7488617c65d1262eac, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1.5
+      value: 1.76
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 63549d2780ccbc7488617c65d1262eac, type: 3}
@@ -177,6 +201,19 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &5336056216787909255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1414432281685821685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 279b884bf74989e44978793aa216af27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  referenceItem: {fileID: 11400000, guid: 799d8ba32d328f04694be810bb6b866a, type: 2}
 --- !u!4 &1414432283556664001 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7443100286087074160, guid: 63549d2780ccbc7488617c65d1262eac, type: 3}

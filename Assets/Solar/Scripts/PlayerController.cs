@@ -278,7 +278,7 @@ public class PlayerController : GravityObject {
 		{
 			if (_paused)
 			{
-				MenuManager.Instance.CloseMenu("pauseMenu");
+				MenuManager.Instance.OpenMenu("UIPanel");
 				_paused = false;
 
 				Cursor.visible = false;

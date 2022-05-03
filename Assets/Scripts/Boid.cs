@@ -18,7 +18,11 @@ public class Boid : MonoBehaviour
     public Rigidbody rb;
 
     public Transform feet;
-        
+
+    CelestialBody[] bodies;
+    Vector3 gravityOfNearestBody;
+    float nearestSurfaceDst;
+
     // Initialize this Boid on Awake()
     void Awake () {
 
@@ -27,7 +31,7 @@ public class Boid : MonoBehaviour
         PlayerPrefab = GameObject.FindGameObjectWithTag("Player");
 
 
-        // Give the Boid a random color, but make sure it's not too dark
+        // Give the Boid a random color
         Color randColor = Color.black;
         while ( randColor.r + randColor.g + randColor.b < 1.0f ) {
            randColor = new Color(Random.value, Random.value, Random.value);
@@ -41,23 +45,53 @@ public class Boid : MonoBehaviour
 
     private void Start()
     {
-        /*CelestialBody startBody = FindObjectOfType<GameSetUp>().startBody;
-        Vector3 pointAbovePlanet = startBody.transform.position + Vector3.right * startBody.radius * 1.1f;
-        transform.position = pointAbovePlanet;
-        */
+        //CelestialBody startBody = FindObjectOfType<GameSetUp>().startBody;
+        CalculateGravity();
+        
+        //Vector3 pointAbovePlanet = referenceBody.transform.position + Vector3.right * referenceBody.radius * 1.1f;
+        //Vector3 awayFromPlanet = transform.position - referenceBody.transform.position;
+        //awayFromPlanet = -awayFromPlanet.normalized;
+        
+        Vector3 disAway = transform.position - referenceBody.transform.position;
+        
+        if(disAway.magnitude < referenceBody.radius)
+        {
+            int count = 0;
+            while(disAway.magnitude < referenceBody.radius + 25)
+            {
+                Debug.Log("Boid from Planet Radius: " + disAway.magnitude);
+                transform.position += transform.up * 5f;
+                disAway = transform.position - referenceBody.transform.position;
+                if (count > 10)
+                {
+                    break;
+                }
+                count++;
+            }
+        }
     }
 
     // Update is called once per frame
     void Update () {
         HandleMovement();
+        
     }
 
     
     void FixedUpdate() {
 
-        CelestialBody[] bodies = NBodySimulation.Bodies;
-        Vector3 gravityOfNearestBody = Vector3.zero;
-        float nearestSurfaceDst = float.MaxValue;
+        CalculateGravity();
+
+        // Move
+        rb.MovePosition(rb.position + targetVelocity * Time.fixedDeltaTime);
+        
+    }
+
+    void CalculateGravity()
+    {
+        bodies = NBodySimulation.Bodies;
+        gravityOfNearestBody = Vector3.zero;
+        nearestSurfaceDst = float.MaxValue;
 
         // Gravity
         foreach (CelestialBody body in bodies)
@@ -81,10 +115,6 @@ public class Boid : MonoBehaviour
         // Rotate to align with gravity up
         Vector3 gravityUp = -gravityOfNearestBody.normalized;
         rb.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * rb.rotation;
-
-        // Move
-        rb.MovePosition(rb.position + targetVelocity * Time.fixedDeltaTime);
-        
     }
 
     void HandleMovement()
