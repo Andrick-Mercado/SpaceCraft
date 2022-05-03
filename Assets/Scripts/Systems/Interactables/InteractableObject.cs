@@ -83,7 +83,7 @@ public class InteractableObject : MonoBehaviour
             _interactionProgress += Time.deltaTime / configSO.InteractionTime;
             if (_interactionProgress >= 1f )
             {
-                _view.RPC("InteractionCompleted", RpcTarget.AllBuffered);
+                _view.RPC("InteractionCompleted", RpcTarget.AllBuffered); //this needs to be called to update all of the players (when I first call the quest) Note how it needs to be added
                 return;                                
             }
             
@@ -98,7 +98,7 @@ public class InteractableObject : MonoBehaviour
         }
     }
 
-    [PunRPC]
+    [PunRPC] //updates for all the players
     private void InteractionCompleted()
     {
         Debug.Log("Collected item: "+ configSO.Name);
