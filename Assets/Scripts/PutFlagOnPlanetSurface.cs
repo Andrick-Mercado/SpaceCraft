@@ -18,7 +18,7 @@ public class PutFlagOnPlanetSurface : MonoBehaviour
             //Rotate flag rightway to normal of planets ray hit
             transform.rotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
 
-            //Put the flag above the ground for now
+            //Put the flagpole above the ground
             transform.position += transform.up * 1.5f;
         }
     }
