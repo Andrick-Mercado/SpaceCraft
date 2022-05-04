@@ -10,7 +10,7 @@ public class BrokenShipQuest : MonoBehaviour
         Debug.Log("Broken Ship Quest assigned!");
         //QuestName = "Broken Ship: Lost Travelers";
         
-        //Descript = "Collect material to fix your ship";
+        Descript = "Collect material to fix your ship";
         //ItemReward = do i need this??? => get back home or continue exploring?
         
         //Goals.Add(new CollectGoal(this, 0, "Collect 10 trees", false, 0, 1);

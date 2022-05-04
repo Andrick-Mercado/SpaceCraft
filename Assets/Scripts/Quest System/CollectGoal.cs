@@ -19,6 +19,11 @@ public class CollectGoal : Goal
     public override void Init()
     {
         base.Init();
-        
+        //InteractableObject.thethingthatwascollected += collecteditem;
+    }
+
+    void CollectedItem()
+    {
+
     }
 }

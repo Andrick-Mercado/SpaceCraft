@@ -1123,6 +1123,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8664243006504013458, guid: 2331f14f3e6cc2e4f843069f99769901, type: 3}
+      propertyPath: sceneViewId
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2331f14f3e6cc2e4f843069f99769901, type: 3}
 --- !u!4 &391217463 stripped
@@ -1294,6 +1298,10 @@ PrefabInstance:
     - target: {fileID: 720389684864406495, guid: 2331f14f3e6cc2e4f843069f99769901, type: 3}
       propertyPath: m_Name
       value: 'Timed Big Rock Spawner '
+      objectReference: {fileID: 0}
+    - target: {fileID: 8664243006504013458, guid: 2331f14f3e6cc2e4f843069f99769901, type: 3}
+      propertyPath: sceneViewId
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2331f14f3e6cc2e4f843069f99769901, type: 3}
@@ -1541,6 +1549,23 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &975086590 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: 225ac0142b794446fb4a75565bd50a81, type: 3}
+  m_PrefabInstance: {fileID: 381921984}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &975086594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 975086590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 697c525aea0ee834996dbc26f0fcb121, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &1066400854
 Mesh:
   m_ObjectHideFlags: 0
@@ -2065,6 +2090,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1305750021}
+  - component: {fileID: 1305750022}
   m_Layer: 0
   m_Name: Quests
   m_TagString: Untagged
@@ -2087,6 +2113,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1305750022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1305750020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cc0435f41e7ad94494449a5db138775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &1339252461
 Mesh:
   m_ObjectHideFlags: 0
@@ -2916,6 +2954,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8664243006504013458, guid: 2331f14f3e6cc2e4f843069f99769901, type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2331f14f3e6cc2e4f843069f99769901, type: 3}
 --- !u!4 &1680153713 stripped
@@ -2993,6 +3035,10 @@ PrefabInstance:
     - target: {fileID: 720389684864406495, guid: 2331f14f3e6cc2e4f843069f99769901, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8664243006504013458, guid: 2331f14f3e6cc2e4f843069f99769901, type: 3}
+      propertyPath: sceneViewId
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2331f14f3e6cc2e4f843069f99769901, type: 3}
