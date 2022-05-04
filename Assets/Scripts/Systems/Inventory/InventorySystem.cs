@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -25,11 +26,31 @@ public class InventorySystem : MonoBehaviour
     {
         Instance = this;
         inventory = new List<InventoryItem>();
+        var database = FindObjectOfType<DatabaseInterface>();
+        
         m_itemDictionary = new Dictionary<InventoryItemData, InventoryItem>();
+        if (database)
+        {
+            StartCoroutine(inventoryLoad(database));
+            
+        }
     }
+    private IEnumerator inventoryLoad(DatabaseInterface database)
+    {
+        yield return new WaitForSeconds(1);
+        inventory = database.loggedInUser.inventory;
+        foreach (InventoryItem i in database.loggedInUser.inventory)
+        {
+            m_itemDictionary.Add(i.data, i);
+        }
+        OnInventoryChangedEvent?.Invoke();
+    }
+<<<<<<< HEAD
     
     
 
+=======
+>>>>>>> Database-integration-progress
     public InventoryItem Get(InventoryItemData referenceData)
     {
         if (m_itemDictionary.TryGetValue(referenceData, out InventoryItem value))
