@@ -13,10 +13,41 @@ public class DatabaseInterface : MonoBehaviour
     public TMP_InputField registerInput;
     public TMP_InputField loginInput;
     public GameObject MenuCover;
-    void Start()
+    public static DatabaseInterface db;
+    bool looped = false;
+    private void Start()
     {
-        //GetDatabaseSnapshot();
+        if (db)
+        {
+            
+            Destroy(gameObject);
+            return;
+        }
         DontDestroyOnLoad(gameObject);
+        db = this;
+    }
+    void OnEnable()
+    {
+        Debug.Log("OnEnable called");
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    // called second
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if(looped&&scene.buildIndex==0)
+            GameObject.Find("LoginCover").SetActive(false);
+        looped = true;
+    }
+
+  
+
+    // called when the game is terminated
+    void OnDisable()
+    {
+        Debug.Log("OnDisable");
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        save();
     }
     void GetDatabaseSnapshot()
     {
