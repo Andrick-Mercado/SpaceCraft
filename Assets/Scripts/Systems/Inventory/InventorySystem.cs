@@ -19,7 +19,6 @@ public class InventorySystem : MonoBehaviour
     private Dictionary<InventoryItemData, InventoryItem> m_itemDictionary;
 
     public delegate void UpdateInventoryEvent();
-
     public event UpdateInventoryEvent OnInventoryChangedEvent;
 
     private void Awake()
@@ -28,6 +27,8 @@ public class InventorySystem : MonoBehaviour
         inventory = new List<InventoryItem>();
         m_itemDictionary = new Dictionary<InventoryItemData, InventoryItem>();
     }
+    
+    
 
     public InventoryItem Get(InventoryItemData referenceData)
     {
