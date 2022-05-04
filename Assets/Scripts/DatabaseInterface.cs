@@ -15,11 +15,14 @@ public class DatabaseInterface : MonoBehaviour
     public GameObject MenuCover;
     public static DatabaseInterface db;
     bool looped = false;
+    public Launcher launcher;
+    public GameObject loading;
     private void Start()
     {
         if (db)
         {
-            
+            launcher.enabled = true;
+            loading.SetActive(true);
             Destroy(gameObject);
             return;
         }
@@ -88,7 +91,8 @@ public class DatabaseInterface : MonoBehaviour
     public void TriggerLoginAttempt()
     {
         LoginUser(loginInput.text);
-        
+        launcher.enabled = true;
+        loading.SetActive(true);
     }
     public void LoginUser(string name)
     {
