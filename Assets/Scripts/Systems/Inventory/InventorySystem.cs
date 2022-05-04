@@ -45,12 +45,7 @@ public class InventorySystem : MonoBehaviour
         }
         OnInventoryChangedEvent?.Invoke();
     }
-<<<<<<< HEAD
-    
-    
 
-=======
->>>>>>> Database-integration-progress
     public InventoryItem Get(InventoryItemData referenceData)
     {
         if (m_itemDictionary.TryGetValue(referenceData, out InventoryItem value))
