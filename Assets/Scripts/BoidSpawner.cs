@@ -12,7 +12,13 @@ public class BoidSpawner : MonoBehaviour
 
     [Header("Customise Boid Properties")]
     // These fields allow you to adjust the behavior of the Boids as a group
+    public int numBoids = 100;
+    public GameObject boidPrefab;
     public float moveSpeed = 20f;
+    public float minVelocity = 0f;
+    public float maxVelocity = 30f;
+    public float moveQuicklySpeed = 50f;
+    public float moveReallyQuickSpeed = 100f;
     //public float minVelocity = 0f;
     //public float maxVelocity = 30f;
     public float nearDist = 30f;

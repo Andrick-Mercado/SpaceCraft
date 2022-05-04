@@ -169,15 +169,16 @@ public class Boid : MonoBehaviour
             {
                 //Debug.Log("TOO HIGH: " + (hit.point - transform.position).magnitude);
                 //Debug.DrawRay(transform.position, dirOfPlanet, Color.white, 20);
-                rb.AddForce(-transform.up * BoidSpawner.S.moveSpeed, ForceMode.Force);
+                rb.AddForce(-transform.up * BoidSpawner.S.moveQuicklySpeed, ForceMode.Force);
             }
             else if(playerToRayVec.magnitude < BoidSpawner.S.minDistancefromPlanet)
             {
                 //Debug.DrawRay(transform.position, dirOfPlanet, Color.red, 20);
                 //Debug.Log("TOO LOW: " + playerToRayVec.magnitude);
-                rb.AddForce(transform.up * BoidSpawner.S.moveSpeed, ForceMode.Force);
+                rb.AddForce(transform.up * BoidSpawner.S.moveQuicklySpeed, ForceMode.Force);
             }
-            
+            else if(playerToRayVec.magnitude < 1f) rb.AddForce(transform.up * BoidSpawner.S.moveReallyQuickSpeed, ForceMode.Force);
+
             //Apply resulting velocity vector to players rigidbody
             rb.velocity = movementVec;
             //rb.velocity = Vector3.ClampMagnitude(rb.velocity, moveSpeed);
