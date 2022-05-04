@@ -84,4 +84,3 @@ crashlytics-build.properties
 
 # Saves
 /Assets/Saves/**
-Assets/Firebase/Plugins/x86_64/FirebaseCppApp-8_10_0.dll
