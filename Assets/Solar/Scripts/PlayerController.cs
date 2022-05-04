@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
-public class PlayerController : GravityObject {
+public class PlayerController : GravityObject
+{
+	public static PlayerController Instance;
 
 	// Exposed variables
 	[Header ("Movement settings")]
@@ -30,6 +30,11 @@ public class PlayerController : GravityObject {
 	public float mass = 70;
 	public LayerMask walkableMask;
 	public Transform feet;
+
+	[Header("Quests")] 
+	public Quest quest;
+
+	private bool _lockPlayerMovement;
 
 	// Private
 	Rigidbody rb;
@@ -60,10 +65,12 @@ public class PlayerController : GravityObject {
 	Animator animator;
 	
 	//for multiplayer
-	private PhotonView _view;
 	private bool _paused;
 
-	void Awake () {
+	void Awake ()
+	{
+		Instance = this;
+		
 		cam = GetComponentInChildren<Camera> ();
 		cameraLocalPos = cam.transform.localPosition;
 		InitRigidbody ();
@@ -84,18 +91,8 @@ public class PlayerController : GravityObject {
 		FindObjectOfType<LODHandler>().camT = GetComponentInChildren<Camera>().transform;
 		
 		//get photon view component
-		_view = GetComponent<PhotonView>();
 		_paused = false;
-	}
-
-	private void Start()
-	{
-		if(_view)
-		if (!_view.IsMine)
-		{
-			Destroy(GetComponentInChildren<Camera>().gameObject);
-			Destroy(rb);
-		}
+		_lockPlayerMovement = false;
 	}
 
 	void InitRigidbody () {
@@ -106,21 +103,34 @@ public class PlayerController : GravityObject {
 		rb.mass = mass;
 	}
 
+	public void LockPlayerMovement(bool lockMovement)
+	{
+		if (!lockMovement)
+		{
+			_lockPlayerMovement = false;
+			Cursor.visible = false;
+			Cursor.lockState = CursorLockMode.Locked;
+		}
+		else
+		{
+			_lockPlayerMovement = true;
+			Cursor.visible = true;
+			Cursor.lockState = CursorLockMode.None;
+		}
+	}
+
 	void Update () 
 	{
-		if (_view)
-			if (!_view.IsMine) return;//prevent other players from using this script
 		
 		HandleMovement ();
 		PauseGame();
 		
 	}
 
-	void HandleMovement () 
+	void HandleMovement ()
 	{
-		if (_view)
-			//prevent other players from moving others or if game is paused
-			if (!_view.IsMine || _paused) return;
+		if (_lockPlayerMovement) return;
+		if (_paused ) return;
 		
 		HandleEditorInput ();
 		// Look input
@@ -287,6 +297,7 @@ public class PlayerController : GravityObject {
 			else
 			{
 				MenuManager.Instance.OpenMenu("pauseMenu");
+				LockPlayerMovement(false);
 				_paused = true;
                 
 				Cursor.visible = true;

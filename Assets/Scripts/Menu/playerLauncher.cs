@@ -1,4 +1,3 @@
-using NaughtyAttributes;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,9 +5,6 @@ using UnityEngine.SceneManagement;
 public class playerLauncher : MonoBehaviourPunCallbacks
 {
     public static playerLauncher Instance;
-
-    [Header("Settings")] [SerializeField, Scene]
-    private string sceneToLoad;
     
     private void Awake()
     {
@@ -17,13 +13,11 @@ public class playerLauncher : MonoBehaviourPunCallbacks
     
     public void LeaveRoom()
     {
-        Destroy(RoomManager.Instance.gameObject);
-        PhotonNetwork.LeaveRoom();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
+        Application.Quit();
     }
 
-    public override void OnLeftRoom()
-    {
-        //PhotonNetwork.LoadLevel(0);
-        SceneManager.LoadScene(sceneToLoad);
-    }
+    
 }

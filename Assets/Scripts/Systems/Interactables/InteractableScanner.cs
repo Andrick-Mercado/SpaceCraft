@@ -12,21 +12,14 @@ public class InteractableScanner : MonoBehaviour
 
     private InteractableObject _currentInteractable;
     private bool _internalPerformInteract;
-    private PhotonView _view;
-    
-    private void Awake()
-    {
-        _view = GetComponent<PhotonView>();
-    }
     private void Update()
     {
         if (Camera.main == null) return;
-
-        if (!_view.IsMine) return;
         
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward,out var hitResult, interactionRange,
                 interactionMask, QueryTriggerInteraction.Collide))
         {
+                
             var candidateInteractable = hitResult.collider.GetComponent<InteractableObject>();
 
             // if we can't interact then null

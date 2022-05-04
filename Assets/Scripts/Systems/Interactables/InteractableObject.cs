@@ -8,8 +8,9 @@ using UnityEngine.Serialization;
 
 public class InteractableObject : MonoBehaviour
 {
-    [Header("Dependencies")] 
-    [SerializeField] private TextMeshProUGUI objectName;
+    [Header("Dependencies")] [SerializeField]
+    private TextMeshProUGUI objectName;
+
     [SerializeField] private TextMeshProUGUI description;
     [SerializeField] private TextMeshProUGUI inputPrompt;
     [SerializeField] private Image activationProgress;
@@ -20,17 +21,13 @@ public class InteractableObject : MonoBehaviour
     private InteractableConfigSO configSO;
 
     [Header("Settings")] [SerializeField] private float alphaSlewRate;
-    [SerializeField] bool AllowInteraction = true;
+    [SerializeField] private bool AllowInteraction = true;
     [SerializeField] private UnityEvent OnInteractionCompleted;
+    [SerializeField] private bool isKinematic;
 
     public bool CanInteract => AllowInteraction;
     private float _targetAlpha = 0f;
     private float _interactionProgress = 0f;
-    private PhotonView _view;
-    private void Awake()
-    {
-        _view = GetComponent<PhotonView>();
-    }
 
     private void Start()
     {
@@ -44,6 +41,7 @@ public class InteractableObject : MonoBehaviour
 
     private void Update()
     {
+        
 
         if (Camera.main == null) return;
 
@@ -52,6 +50,12 @@ public class InteractableObject : MonoBehaviour
             promptGroup.alpha = Mathf.MoveTowards(promptGroup.alpha, _targetAlpha, alphaSlewRate * Time.deltaTime);
         }
 
+        if (isKinematic)
+        {
+            
+            return;
+        }
+        
         if (promptGroup.alpha > 0)
         {
             Transform camT = Camera.main.transform;
@@ -75,14 +79,14 @@ public class InteractableObject : MonoBehaviour
         {
             if (configSO.InteractionTime <= 0 )
             {
-                _view.RPC(nameof(InteractionCompleted), RpcTarget.AllBuffered);
+                InteractionCompleted();
                 return;
             }
             
             _interactionProgress += Time.deltaTime / configSO.InteractionTime;
             if (_interactionProgress >= 1f )
             {
-                _view.RPC(nameof(InteractionCompleted), RpcTarget.AllBuffered);
+                InteractionCompleted();
                 return;                                
             }
             
@@ -97,21 +101,86 @@ public class InteractableObject : MonoBehaviour
         }
     }
 
-    [PunRPC]
     private void InteractionCompleted()
     {
-        Debug.Log("Interacted with: "+ configSO.Name);
-        
-        //only added to our inventory if its an inventory item and delete it afterwards
-        if (TryGetComponent<ItemObject>(out ItemObject itemObject))
+        if (configSO.Name == "Quest Getter")
         {
-            itemObject.OnHandlePickupItem();
+            Debug.Log("Open TH QuestBoard");
+            //AllowInteraction = false;
+            promptGroup.alpha = _targetAlpha = 0f;
+            OnInteractionCompleted.Invoke();
+            QuestGiver.Instance.OpenQuestWindow();
+        }
+        else if (configSO.Name == "Spaceship")
+        {
+            if (PlayerController.Instance.quest.title == "Deliver Package")
+            {
+                Debug.Log("Supplies turned in");
+                AllowInteraction = false;
+                promptGroup.alpha = _targetAlpha = 0f;
+                OnInteractionCompleted.Invoke();
+                tempScript.Instance.removeItemAmount("Birds", 1);
+                tempScript.Instance.removeItemAmount("Flint", 3);
+                PlayerController.Instance.quest.questGoal[0].DeliverPackage();
+                if (PlayerController.Instance.quest.questGoal[0].IsReached())
+                {
+                    //do something else when Completed task
+                    PlayerController.Instance.quest.Complete();
+                    QuestGiver.Instance.CurrentQuest++;
+                }
+            }
+            
+
+        }
+        else
+        {
+            Debug.Log("Collected item: " + configSO.Name);
+            tempScript.Instance.UpdateInventory(configSO.Name);
+            if (PlayerController.Instance.quest.isActive && PlayerController.Instance.quest.questGoal[0].goalType == GoalType.Gathering)
+            {
+                if (PlayerController.Instance.quest.title == "Collect Flint")
+                {
+                    PlayerController.Instance.quest.questGoal[0].ItemCollected();
+                    if (PlayerController.Instance.quest.questGoal[0].IsReached())
+                    {
+                        //do something else when Completed task
+                        PlayerController.Instance.quest.Complete();
+                        QuestGiver.Instance.CurrentQuest++;
+                    }
+                }
+            }
+            else if (PlayerController.Instance.quest.isActive && PlayerController.Instance.quest.questGoal[0].goalType == GoalType.Kill)
+            {
+                if (PlayerController.Instance.quest.title == "Kill Birds")
+                {
+                    PlayerController.Instance.quest.questGoal[0].EnemyKilled();
+                    if (PlayerController.Instance.quest.questGoal[0].IsReached())
+                    {
+                        //do something else when Completed task
+                        PlayerController.Instance.quest.Complete();
+                        QuestGiver.Instance.CurrentQuest++;
+                    }
+                }
+            }
+            else if (PlayerController.Instance.quest.isActive && PlayerController.Instance.quest.questGoal[0].goalType == GoalType.Deliver)
+            {
+                if (PlayerController.Instance.quest.title == "Deliver Package")
+                {
+                    PlayerController.Instance.quest.questGoal[0].DeliverPackage();
+                    if (PlayerController.Instance.quest.questGoal[0].IsReached())
+                    {
+                        //do something else when Completed task
+                        PlayerController.Instance.quest.Complete();
+                        QuestGiver.Instance.CurrentQuest++;
+                        
+                    }
+                }
+            }
+            
             AllowInteraction = false;
             promptGroup.alpha = _targetAlpha = 0f;
             OnInteractionCompleted.Invoke();
             Destroy(gameObject);
         }
-        
-        //here we can add other interaction systems
     }
 }
