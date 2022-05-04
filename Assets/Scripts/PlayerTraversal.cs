@@ -15,14 +15,16 @@ public class PlayerTraversal : MonoBehaviour
     public Button traversalYes;
     public Button traversalNo;
 
+    Vector3 rayHit;
+    Vector3 rayHitNormal;
+
+    bool inTraversal = false;
+
     void Start()
     {
         bodies = NBodySimulation.Bodies;
         rb = gameObject.GetComponent<Rigidbody>();
         pc = gameObject.GetComponent<PlayerController>();
-        //traversalText = GameObject.Find("Traversal_Text").GetComponent<TextMeshProUGUI>();
-        //traversalYes = GameObject.Find("Traversal_Yes").GetComponent<Button>();
-        //traversalNo = GameObject.Find("Traversal_No").GetComponent<Button>();
 
         GameObject canvas = GameObject.Find("menuCanvas");
         Button[] menubuttons = canvas.transform.GetComponentsInChildren<Button>(true);
@@ -41,7 +43,6 @@ public class PlayerTraversal : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         PingPlanet();
@@ -49,27 +50,35 @@ public class PlayerTraversal : MonoBehaviour
 
     public void PingPlanet()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (!inTraversal)
         {
-            if(Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out var hit, 99999f))
+            if (Input.GetKeyDown(KeyCode.F))
             {
-                foreach(CelestialBody celeBody in bodies)
+                if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out var hit, 99999f))
                 {
-                    if(celeBody.name == hit.transform.name)
+                    foreach (CelestialBody celeBody in bodies)
                     {
-                        traversalText.text = hit.transform.name;
-                        MenuManager.Instance.OpenMenu("traversalMenu");
-                        Cursor.visible = true;
-                        Cursor.lockState = CursorLockMode.None;
+                        if (celeBody.name == hit.transform.name)
+                        {
+                            rayHit = hit.point;
+                            rayHitNormal = hit.normal;
+                            traversalText.text = hit.transform.name;
+                            MenuManager.Instance.OpenMenu("traversalMenu");
+                            Cursor.visible = true;
+                            Cursor.lockState = CursorLockMode.None;
+                        }
                     }
                 }
             }
         }
+        
     }
 
     public void TraversalYesInput()
     {
         Debug.Log("Traversal Yes");
+        inTraversal = true;
+        StartCoroutine(MoveToPlanet(transform.position));
     }
 
     public void TraversalNoInput()
@@ -77,5 +86,26 @@ public class PlayerTraversal : MonoBehaviour
         MenuManager.Instance.CloseMenu("traversalMenu");
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    IEnumerator MoveToPlanet(Vector3 currPos)
+    {
+        //pc.enabled = false;
+        //rb.isKinematic = true;
+
+        TraversalNoInput();
+        float time = 0;
+        rayHit = rayHit + rayHitNormal * 5f;
+        while(time < 1)
+        {
+            time += Time.deltaTime * .1f;
+            if (time > 1) time = 1;
+            transform.position = Vector3.Lerp(currPos, rayHit, time);
+            yield return null;
+        }
+        inTraversal = false;
+
+        //pc.enabled = true;
+        //rb.isKinematic = false;
     }
 }
