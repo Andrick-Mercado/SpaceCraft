@@ -315,7 +315,7 @@ public class PlayerController : GravityObject
     {
 		return referenceBody.name;
     }
-	private void OnLockPlayerMovement()
+	public void OnLockPlayerMovement()
 	{
 		if (_view)
 			if (!_view.IsMine) return;
@@ -325,7 +325,7 @@ public class PlayerController : GravityObject
 		Cursor.lockState = CursorLockMode.None;
 	}
 
-	private void OnUnlockPlayerMovement()
+	public void OnUnlockPlayerMovement()
 	{
 		if (_view)
 			if (!_view.IsMine) return;
