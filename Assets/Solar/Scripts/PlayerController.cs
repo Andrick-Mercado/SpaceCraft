@@ -295,4 +295,10 @@ public class PlayerController : GravityObject {
 		}
 	}
 
+
+	public string GetClosestPlanetName()
+    {
+		return referenceBody.name;
+    }
+
 }

@@ -56,22 +56,25 @@ public class PlayerTraversal : MonoBehaviour
             {
                 if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out var hit, 99999f))
                 {
-                    foreach (CelestialBody celeBody in bodies)
+                    if (hit.transform.name != pc.GetClosestPlanetName() && hit.transform.name != "Sun")
                     {
-                        if (celeBody.name == hit.transform.name)
+                        foreach (CelestialBody celeBody in bodies)
                         {
-                            rayHit = hit.point;
-                            rayHitNormal = hit.normal;
-                            traversalText.text = hit.transform.name;
-                            MenuManager.Instance.OpenMenu("traversalMenu");
-                            Cursor.visible = true;
-                            Cursor.lockState = CursorLockMode.None;
+                            if (celeBody.name == hit.transform.name)
+                            {
+                                rayHit = hit.point;
+                                rayHitNormal = hit.normal;
+                                traversalText.text = hit.transform.name;
+                                MenuManager.Instance.OpenMenu("traversalMenu");
+                                Cursor.visible = true;
+                                Cursor.lockState = CursorLockMode.None;
+                            }
                         }
                     }
+
                 }
             }
         }
-        
     }
 
     public void TraversalYesInput()
