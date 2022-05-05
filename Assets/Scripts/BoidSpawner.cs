@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class BoidSpawner : MonoBehaviour
 {
@@ -37,8 +38,13 @@ public class BoidSpawner : MonoBehaviour
 
     private void Awake()
     {
-        // Set the Singleton S to be this instance of BoidSpawner
-        S = this;
+        if (PhotonNetwork.IsMasterClient)
+        {
+            // Set the Singleton S to be this instance of BoidSpawner
+            S = this;
+        }
+
+        
     }
    
     

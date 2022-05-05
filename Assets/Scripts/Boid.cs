@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Photon.Pun;
 public class Boid : MonoBehaviour
 {
 
@@ -33,6 +33,30 @@ public class Boid : MonoBehaviour
 
     // Initialize this Boid on Awake()
     void Awake () {
+        // Give the Boid a random color
+        Color randColor = Color.black;
+        while (randColor.r + randColor.g + randColor.b < 1.0f)
+        {
+            randColor = new Color(Random.value, Random.value, Random.value);
+        }
+        Renderer[] rends = gameObject.GetComponentsInChildren<Renderer>();
+        foreach (Renderer r in rends)
+        {
+            if (r.transform.name == "EyeL" || r.transform.name == "EyeR")
+            {
+                r.material.color = Color.black;
+            }
+            else
+            {
+                r.material.color = randColor;
+            }
+
+        }
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
+        
         // Define the boids List if it is still null
         if (boids == null)
         {
@@ -45,23 +69,7 @@ public class Boid : MonoBehaviour
         neighbors = new List<Boid>();
         collisionRisks = new List<Boid>();
 
-        // Give the Boid a random color
-        Color randColor = Color.black;
-        while ( randColor.r + randColor.g + randColor.b < 1.0f ) {
-           randColor = new Color(Random.value, Random.value, Random.value);
-        }
-        Renderer[] rends = gameObject.GetComponentsInChildren<Renderer>();
-        foreach ( Renderer r in rends ) {
-            if (r.transform.name == "EyeL" || r.transform.name == "EyeR")
-            {
-                r.material.color = Color.black;
-            }
-            else
-            {
-                r.material.color = randColor;
-            }
-            
-        }
+
         
         
     }
@@ -69,6 +77,11 @@ public class Boid : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
+        
 
         PlayerPrefab = GameObject.FindGameObjectWithTag("Player");
 
@@ -99,6 +112,10 @@ public class Boid : MonoBehaviour
 
     // Update is called once per frame
     void Update () {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
         //bool isGrounded = IsGrounded();
         targetVelocity = rb.velocity;
 
@@ -146,6 +163,10 @@ public class Boid : MonoBehaviour
 
     
     void FixedUpdate() {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
         CalculateGravity();
 
         Vector3 dirOfPlanet = (referenceBody.transform.position - transform.position);
