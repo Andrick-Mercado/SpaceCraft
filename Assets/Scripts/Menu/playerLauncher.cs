@@ -9,22 +9,46 @@ public class playerLauncher : MonoBehaviourPunCallbacks
 
     [Header("Settings")] [SerializeField, Scene]
     private string sceneToLoad;
+
+    private PhotonView _view;
     
     private void Awake()
     {
         Instance = this;
+        _view = GetComponent<PhotonView>();
     }
     
+    [PunRPC]
     public void LeaveRoom()
     {
         FindObjectOfType<DatabaseInterface>().save();
-        Destroy(RoomManager.Instance.gameObject);
-        PhotonNetwork.LeaveRoom();
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            _view.RPC(nameof(LeaveRoomPlayers), RpcTarget.AllBuffered);
+        }
+        else
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            Destroy(RoomManager.Instance.gameObject);
+            PhotonNetwork.LeaveRoom();
+        }
+        
     }
 
     public override void OnLeftRoom()
     {
         //PhotonNetwork.LoadLevel(0);
         SceneManager.LoadScene(sceneToLoad);
+    }
+
+    [PunRPC]
+    private void LeaveRoomPlayers()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        Destroy(RoomManager.Instance.gameObject);
+        PhotonNetwork.LeaveRoom();
     }
 }
