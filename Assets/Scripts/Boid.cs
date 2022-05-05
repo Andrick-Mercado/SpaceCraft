@@ -101,6 +101,7 @@ public class Boid : MonoBehaviour
 
     // Update is called once per frame
     void Update () {
+        return;
         if (!PhotonNetwork.IsMasterClient)
         {
             return;
@@ -151,6 +152,7 @@ public class Boid : MonoBehaviour
 
     
     void FixedUpdate() {
+        return;
         if (!PhotonNetwork.IsMasterClient)
         {
             return;
