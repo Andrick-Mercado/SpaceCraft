@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Photon.Pun;
 
 public class PlayerTraversal : MonoBehaviour
 {
@@ -45,6 +46,7 @@ public class PlayerTraversal : MonoBehaviour
 
     void Update()
     {
+        if (rb == null) return;
         PingPlanet();
     }
 
@@ -80,12 +82,14 @@ public class PlayerTraversal : MonoBehaviour
 
     public void TraversalYesInput()
     {
+        if (rb == null) return;
         inTraversal = true;
         StartCoroutine(MoveToPlanet(transform.position));
     }
 
     public void TraversalNoInput()
     {
+        if (rb == null) return;
         MenuManager.Instance.CloseMenu("traversalMenu");
         MenuManager.Instance.TurnOnCrosshair();
         Cursor.visible = false;
