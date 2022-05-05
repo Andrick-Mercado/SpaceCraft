@@ -21,6 +21,10 @@ public class Boid : MonoBehaviour
     public GameObject PlayerPrefab;
     public CelestialBody referenceBody;
 
+    public float moveSpeed;
+    public int spawnPlanetPadding;
+
+
     public Rigidbody rb;
 
     public Transform feet;
@@ -81,7 +85,7 @@ public class Boid : MonoBehaviour
 
         Vector3 disAway = transform.position - referenceBody.transform.position;
         int count = 0;
-        while(disAway.magnitude < referenceBody.radius + BoidSpawner.S.spawnPlanetPadding)
+        while(disAway.magnitude < referenceBody.radius + spawnPlanetPadding)
         {
             //Debug.Log("Boid from Planet Radius: " + disAway.magnitude);
             transform.position += transform.up * 2f;
@@ -165,35 +169,27 @@ public class Boid : MonoBehaviour
             {
                 //Debug.Log("TOO HIGH: " + (hit.point - transform.position).magnitude);
                 //Debug.DrawRay(transform.position, dirOfPlanet, Color.white, 20);
-                rb.AddForce(-transform.up * BoidSpawner.S.moveQuicklySpeed, ForceMode.Force);
+                rb.AddForce(-transform.up * BoidSpawner.S.moveSpeed, ForceMode.Force);
             }
-            else if(playerToRayVec.magnitude < BoidSpawner.S.minDistancefromPlanet && playerToRayVec.magnitude > 1f)
+            else if(playerToRayVec.magnitude < BoidSpawner.S.minDistancefromPlanet)
             {
                 //Debug.DrawRay(transform.position, dirOfPlanet, Color.red, 20);
                 //Debug.Log("TOO LOW: " + playerToRayVec.magnitude);
-                //Debug.Log("quickup " + playerToRayVec.magnitude);
-                rb.AddForce(transform.up * BoidSpawner.S.moveQuicklySpeed, ForceMode.Force);
+                rb.AddForce(transform.up * BoidSpawner.S.moveSpeed, ForceMode.Force);
             }
-            else if(playerToRayVec.magnitude < 1f)
-            {
-                //Debug.Log("VERYquickup " + playerToRayVec.magnitude);
-                Debug.DrawRay(transform.position, playerToRayVec, Color.blue, 50);
-                rb.AddForce(transform.up * BoidSpawner.S.moveReallyQuickSpeed, ForceMode.Force);
-            }
-
+            
             //Apply resulting velocity vector to players rigidbody
             rb.velocity = movementVec;
             //rb.velocity = Vector3.ClampMagnitude(rb.velocity, moveSpeed);
 
-            //Rotation after finding velocity vector to rotate object towards the direction of velocity vector
+            //Rotation after finding direction vector to rotate object towards velocity vector
             rb.rotation = Quaternion.FromToRotation(transform.forward, rb.velocity.normalized) * rb.rotation;
             //transform.rotation = Quaternion.LookRotation(rb.velocity); 
         }
         else
         {
-            //If raycast fail, either Boid spawned inside planet or some void. Better to destroy self than use resources
             Debug.Log("BOID RAYCAST FAIL");
-            Destroy(gameObject);
+            CalculateGravity();
         }
 
     }
@@ -228,7 +224,32 @@ public class Boid : MonoBehaviour
         rb.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * rb.rotation;
     }
 
-    //If neighboring Boids are either "nearDist" or "collisionDist" away from this Boid, add them to a List<Boid> of neighbors
+  
+    bool IsGrounded()
+    {
+        // Sphere must not overlay terrain at origin otherwise no collision will be detected
+        // so rayRadius should not be larger than controller's capsule collider radius
+        const float rayRadius = .3f;
+        const float groundedRayDst = .2f;
+        bool grounded = false;
+
+        if (referenceBody)
+        {
+            var relativeVelocity = rb.velocity - referenceBody.velocity;
+            
+            
+            RaycastHit hit;
+            Vector3 offsetToFeet = (feet.position - transform.position);
+            Vector3 rayOrigin = rb.position + offsetToFeet + transform.up * rayRadius;
+            Vector3 rayDir = -transform.up;
+
+            grounded = Physics.SphereCast(rayOrigin, rayRadius, rayDir, out hit, groundedRayDst, walkableMask);
+            
+        }
+
+        return grounded;
+    }
+
     public List<Boid> GetNeighbors(Boid boi)
     {
         float closestDist = float.MaxValue;
@@ -240,9 +261,6 @@ public class Boid : MonoBehaviour
         foreach (Boid b in boids)
         {
             if (b == boi) continue;
-            //Can only have 3 other boid neighbors to flock. Help stop flocking of EVERY boid
-            if (neighbors.Count == 3) continue;
-            
             delta = b.transform.position - boi.transform.position;
             dist = delta.magnitude;
             if (dist < closestDist)

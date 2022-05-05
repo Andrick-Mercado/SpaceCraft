@@ -17,7 +17,6 @@ public class playerLauncher : MonoBehaviourPunCallbacks
     
     public void LeaveRoom()
     {
-        FindObjectOfType<DatabaseInterface>().save();
         Destroy(RoomManager.Instance.gameObject);
         PhotonNetwork.LeaveRoom();
     }

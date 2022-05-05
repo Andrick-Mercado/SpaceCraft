@@ -90,13 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fad179a16466c9e46a74d7754ac80839, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numBoids: 100
-  boidPrefab: {fileID: 0}
   moveSpeed: 300
-  minVelocity: 300
-  maxVelocity: 9999
-  moveQuicklySpeed: 500
-  moveReallyQuickSpeed: 1000
   nearDist: 10
   collisionDist: 5
   velocityMatchingAmt: 0.01
