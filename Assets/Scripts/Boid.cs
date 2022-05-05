@@ -58,20 +58,18 @@ public class Boid : MonoBehaviour
         }
         
         // Define the boids List if it is still null
-        if (boids == null)
+        if (boids == null || BoidSpawner.S.newGame)
         {
             boids = new List<Boid>();
+            BoidSpawner.S.newGame = false;
         }
+
         // Add this Boid to boids
         boids.Add(this);
 
         // Initialize the two Lists
         neighbors = new List<Boid>();
-        collisionRisks = new List<Boid>();
-
-
-        
-        
+        collisionRisks = new List<Boid>();   
     }
     
     private void Start()
@@ -81,22 +79,15 @@ public class Boid : MonoBehaviour
         {
             return;
         }
-        
-
+   
         PlayerPrefab = GameObject.FindGameObjectWithTag("Player");
 
         CalculateGravity();
-
-        //CelestialBody startBody = FindObjectOfType<GameSetUp>().startBody;
-        //Vector3 pointAbovePlanet = referenceBody.transform.position + Vector3.right * referenceBody.radius * 1.1f;
-        //Vector3 awayFromPlanet = transform.position - referenceBody.transform.position;
-        //awayFromPlanet = -awayFromPlanet.normalized;
 
         Vector3 disAway = transform.position - referenceBody.transform.position;
         int count = 0;
         while(disAway.magnitude < referenceBody.radius + BoidSpawner.S.spawnPlanetPadding)
         {
-            //Debug.Log("Boid from Planet Radius: " + disAway.magnitude);
             transform.position += transform.up * 2f;
             disAway = transform.position - referenceBody.transform.position;
             if (count > 10)
@@ -105,9 +96,7 @@ public class Boid : MonoBehaviour
             }
             count++;
         }
-        disAway = transform.position - referenceBody.transform.position;
-        //Debug.Log(disAway.magnitude);
-        //Debug.Log("planet: " + referenceBody.transform.name);
+
     }
 
     // Update is called once per frame
@@ -122,7 +111,6 @@ public class Boid : MonoBehaviour
         // Get the list of potential nearby Boids
         List<Boid> neighbors = GetNeighbors(this);
 
-        //Debug.Log("# neighbors: " + neighbors.Count);
         // If the Boid has neighbors, adjust directional vector for flocking
         if(neighbors.Count != 0)
         {
@@ -170,8 +158,6 @@ public class Boid : MonoBehaviour
         CalculateGravity();
 
         Vector3 dirOfPlanet = (referenceBody.transform.position - transform.position);
-        //Debug.DrawLine(transform.position, referenceBody.transform.position, Color.green, 10000f);
-        //Debug.DrawRay(transform.position, dirOfPlanet, Color.red, 9999f);
 
         if (Physics.Raycast(transform.position, dirOfPlanet, out var hit, 10000f))
         {
@@ -198,23 +184,20 @@ public class Boid : MonoBehaviour
             else if(playerToRayVec.magnitude < 1f)
             {
                 //Debug.Log("VERYquickup " + playerToRayVec.magnitude);
-                Debug.DrawRay(transform.position, playerToRayVec, Color.blue, 50);
+                //Debug.DrawRay(transform.position, playerToRayVec, Color.blue, 50);
                 rb.AddForce(transform.up * BoidSpawner.S.moveReallyQuickSpeed, ForceMode.Force);
             }
 
             //Apply resulting velocity vector to players rigidbody
             rb.velocity = movementVec;
-            //rb.velocity = Vector3.ClampMagnitude(rb.velocity, moveSpeed);
 
             //Rotation after finding velocity vector to rotate object towards the direction of velocity vector
-            rb.rotation = Quaternion.FromToRotation(transform.forward, rb.velocity.normalized) * rb.rotation;
-            //transform.rotation = Quaternion.LookRotation(rb.velocity); 
+            rb.rotation = Quaternion.FromToRotation(transform.forward, rb.velocity.normalized) * rb.rotation; 
         }
         else
         {
-            //If raycast fail, either Boid spawned inside planet or some void. Better to destroy self than use resources
+            //Raycast fail
             Debug.Log("BOID RAYCAST FAIL");
-            Destroy(gameObject);
         }
 
     }
@@ -257,7 +240,6 @@ public class Boid : MonoBehaviour
         float dist;
         neighbors.Clear();
         collisionRisks.Clear();
-
         foreach (Boid b in boids)
         {
             if (b == boi) continue;
