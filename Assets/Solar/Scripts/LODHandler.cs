@@ -34,7 +34,11 @@ public class LODHandler : MonoBehaviour {
 
 	void Update () {
 		DebugLODInfo ();
-
+        if (cam == null)
+        {
+			cam = Camera.main;
+			camT = cam.transform;
+        }
 		if (Application.isPlaying && cam != null) {
 			HandleLODs ();
 		}
@@ -42,6 +46,7 @@ public class LODHandler : MonoBehaviour {
 	}
 
 	void HandleLODs () {
+		
 		for (int i = 0; i < bodies.Length; i++) {
 			if (generators[i] != null) {
 				float screenHeight = CalculateScreenHeight (bodies[i]);

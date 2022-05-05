@@ -73,7 +73,6 @@ public class PlayerController : GravityObject
 		cam = GetComponentInChildren<Camera> ();
 		cameraLocalPos = cam.transform.localPosition;
 		InitRigidbody ();
-
 		if (lockCursor) {
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
@@ -86,9 +85,9 @@ public class PlayerController : GravityObject
 		SetVelocity(startBody.initialVelocity);
 		FindObjectOfType<EndlessManager>().physicsObjects.Add(transform);
 		FindObjectOfType<EndlessManager>().playerCamera = GetComponentInChildren<Camera>();
-		FindObjectOfType<LODHandler>().cam= GetComponentInChildren<Camera>();
-		FindObjectOfType<LODHandler>().camT = GetComponentInChildren<Camera>().transform;
-		
+		FindObjectOfType<LODHandler>().cam = cam;
+		FindObjectOfType<LODHandler>().camT = cam.transform;
+
 		//get photon view component
 		_view = GetComponent<PhotonView>();
 		_paused = false;
