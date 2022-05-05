@@ -123,6 +123,8 @@ public class InteractableObject : MonoBehaviour
                 QuestGiver.Instance.CurrentQuest++;
                 
                 InventorySystem.Instance.RemoveAll();
+                QuestGiver.Instance.CrossTextQuest();
+
             }
         }
         //only added to our inventory if its an inventory item and delete it afterwards

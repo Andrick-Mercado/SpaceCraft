@@ -34,6 +34,7 @@ public class ItemObject : MonoBehaviour
             {
                 QuestGiver.Instance.GetCurrentQuest().Complete();
                 QuestGiver.Instance.CurrentQuest++;
+                CrossTextCompletion();
             }
         }
         if (QuestGiver.Instance.GetCurrentQuest() != null 
@@ -47,6 +48,7 @@ public class ItemObject : MonoBehaviour
             {
                 QuestGiver.Instance.GetCurrentQuest().Complete();
                 QuestGiver.Instance.CurrentQuest++;
+                CrossTextCompletion();
             }
         }
         if (QuestGiver.Instance.GetCurrentQuest() != null 
@@ -60,7 +62,13 @@ public class ItemObject : MonoBehaviour
             {
                 QuestGiver.Instance.GetCurrentQuest().Complete();
                 QuestGiver.Instance.CurrentQuest++;
+                CrossTextCompletion();
             }
         }
+    }
+
+    private void CrossTextCompletion()
+    {
+        QuestGiver.Instance.CrossTextQuest();
     }
 }

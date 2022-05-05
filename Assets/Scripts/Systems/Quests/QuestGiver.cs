@@ -72,23 +72,25 @@ public class QuestGiver : MonoBehaviour
         if (CurrentQuest >= quest.Length)
         {
             MenuManager.Instance.OpenMenu("UIPanel");
-            //PlayerController.Instance.LockPlayerMovement(false);
+            
             OnUnlockPlayerMovementEvent?.Invoke();
-            questDisplay.text = "+ Finished All Available Quests";//+ Quest GatherFlint Colletect 3 Flint
+            questDisplay.text = "+ Finished All Available Quests";
             return;
         }
         MenuManager.Instance.OpenMenu("UIPanel");
-        quest[CurrentQuest].isActive = true;
+        
         
         _view.RPC(nameof(GiveQuestPlayers), RpcTarget.AllBuffered);
-        
-        
+
         OnUnlockPlayerMovementEvent?.Invoke();
     }
 
     [PunRPC]
     private void GiveQuestPlayers()
     {
+        UncrossTextQuest();
+        quest[CurrentQuest].isActive = true;
+        
         if (quest[CurrentQuest].questGoal[0].goalType == GoalType.Deliver)
         {
             questDisplay.text = "+ Quest Deliver items to spaceship!";
@@ -112,6 +114,17 @@ public class QuestGiver : MonoBehaviour
             return null;
             
         return quest[CurrentQuest];
+    }
+
+    public void CrossTextQuest()
+    {
+        questDisplay.fontStyle = FontStyles.Bold | FontStyles.Strikethrough | FontStyles.Italic;
+        //questDisplay.text = "<s color=#ff800080>"+questDisplay.text + "</s>";
+    }
+
+    public void UncrossTextQuest()
+    {
+        questDisplay.fontStyle = FontStyles.Bold |  FontStyles.Italic;
     }
     
 
