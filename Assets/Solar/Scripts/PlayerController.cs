@@ -228,7 +228,7 @@ public class PlayerController : GravityObject
 			float sqrDst = (body.Position - rb.position).sqrMagnitude;
 			Vector3 forceDir = (body.Position - rb.position).normalized;
 			Vector3 acceleration = forceDir * Universe.gravitationalConstant * body.mass / sqrDst;
-			rb.AddForce (acceleration, ForceMode.Acceleration);
+			//rb.AddForce (acceleration, ForceMode.Acceleration);
 
 			float dstToSurface = Mathf.Sqrt (sqrDst) - body.radius;
 
@@ -239,7 +239,7 @@ public class PlayerController : GravityObject
 				referenceBody = body;
 			}
 		}
-
+		rb.AddForce (gravityOfNearestBody, ForceMode.Acceleration);
 		// Rotate to align with gravity up
 		Vector3 gravityUp = -gravityOfNearestBody.normalized;
 		rb.rotation = Quaternion.FromToRotation (transform.up, gravityUp) * rb.rotation;
