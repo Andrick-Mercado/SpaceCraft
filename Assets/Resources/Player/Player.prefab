@@ -399,6 +399,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1536
   feet: {fileID: 5406502975627480105}
+  quest:
+    isActive: 0
+    title: 
+    description: 
+    experienceReward: 0
+    questGoal: []
 --- !u!136 &5406502976704646172
 CapsuleCollider:
   m_ObjectHideFlags: 0
