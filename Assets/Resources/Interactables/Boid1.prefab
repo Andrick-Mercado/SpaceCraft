@@ -29,7 +29,6 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.1, y: -0.100000024, z: 0.059999995}
   m_LocalScale: {x: 0.1, y: 0.10000001, z: 0.10000003}
-  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 68399193801419599}
   m_RootOrder: 2
@@ -123,7 +122,6 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.2, z: 0.05}
   m_LocalScale: {x: 0.2, y: 0.05, z: 0.01}
-  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 752534276777005156}
   m_Father: {fileID: 68399193801419599}
@@ -157,7 +155,6 @@ Transform:
   m_LocalRotation: {x: 0.35355338, y: -0.1464466, z: 0.35355338, w: 0.8535535}
   m_LocalPosition: {x: 0, y: 0, z: 0.2}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
-  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2108630923070336925}
   m_RootOrder: 0
@@ -241,7 +238,6 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.1, y: -0.100000024, z: 0.059999995}
   m_LocalScale: {x: 0.1, y: 0.10000001, z: 0.10000003}
-  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 68399193801419599}
   m_RootOrder: 1
@@ -341,7 +337,6 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2714185552939803256}
   - {fileID: 7137070802653851806}
@@ -569,7 +564,6 @@ Transform:
   m_LocalRotation: {x: 0.9238444, y: -0.38266885, z: 0.003339545, w: 0.008062375}
   m_LocalPosition: {x: 0, y: -0.5, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2714185552939803256}
   m_RootOrder: 0
@@ -650,7 +644,6 @@ Transform:
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 0.2, z: 0.5}
-  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3021968357153135761}
   m_Father: {fileID: 68399193801419599}
