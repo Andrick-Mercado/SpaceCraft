@@ -66,6 +66,7 @@ public class PlayerTraversal : MonoBehaviour
                                 rayHitNormal = hit.normal;
                                 traversalText.text = hit.transform.name;
                                 MenuManager.Instance.OpenMenu("traversalMenu");
+                                pc.OnLockPlayerMovement();
                                 Cursor.visible = true;
                                 Cursor.lockState = CursorLockMode.None;
                             }
@@ -89,6 +90,7 @@ public class PlayerTraversal : MonoBehaviour
         MenuManager.Instance.TurnOnCrosshair();
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        pc.OnUnlockPlayerMovement();
     }
 
     IEnumerator MoveToPlanet(Vector3 currPos)
@@ -107,5 +109,6 @@ public class PlayerTraversal : MonoBehaviour
         rb.velocity = Vector3.zero;
         inTraversal = false;
         MenuManager.Instance.TurnOnCrosshair();
+        pc.OnUnlockPlayerMovement();
     }
 }

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb767fc8a0e9419479dd3896f78ff868, type: 3}
-  m_Name: Interactable_01
+  m_Name: Mineral
   m_EditorClassIdentifier: 
-  Name: Flint
-  Description: This is just regular flint instant pickup
-  Verb: Pickup
-  InteractionTime: 0
+  Name: Mineral
+  Description: This is a mineral, it will take 5 seconds to collect
+  Verb: Collect
+  InteractionTime: 5

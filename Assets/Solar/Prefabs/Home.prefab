@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7826077053930453656}
   m_Layer: 10
   m_Name: Home
-  m_TagString: Untagged
+  m_TagString: Home
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -50,9 +50,9 @@ MonoBehaviour:
   radius: 100
   surfaceGravity: 8
   initialVelocity: {x: 0, y: 0, z: 0}
-  bodyName: Home
+  bodyName: Terra
   lockPosition: 1
-  mass: 0
+  mass: 800000000
 --- !u!54 &7826077053930453656
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -81,7 +81,7 @@ GameObject:
   - component: {fileID: 7826077054018863754}
   m_Layer: 10
   m_Name: Mesh Holder
-  m_TagString: Untagged
+  m_TagString: Home
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 7826077054984642286}
   m_Layer: 10
   m_Name: Mesh
-  m_TagString: Untagged
+  m_TagString: Home
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

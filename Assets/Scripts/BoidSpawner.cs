@@ -25,16 +25,14 @@ public class BoidSpawner : MonoBehaviour
     public float velocityMatchingAmt = 0.01f;
     public float flockCenteringAmt = 0.15f;
     public float collisionAvoidanceAmt = -0.15f;
-    public float attractionAmt = 0.01f;
-    public float attractionAmtClose = 0.5f;
-    public float avoidanceAmt = 0.75f;
-    public float avoidanceDist = 15f;
     public float velocityLerpAmt = 0.15f;
 
     public float maxDistancefromPlanet = 5;
     public float minDistancefromPlanet = 3;
 
     public int spawnPlanetPadding = 20;
+
+    public bool newGame = true;
 
     private void Awake()
     {

@@ -26,9 +26,19 @@ public class QuestGoal
             currentAmount++;
     }
 
-    public void ItemCollected()
+    public void ItemCollectedFlint()
     {
-        if (goalType == GoalType.Gather)
+        if (goalType == GoalType.GatherFlint)
+            currentAmount++;
+    }
+    public void ItemCollectedMineral()
+    {
+        if (goalType == GoalType.GatherMineral)
+            currentAmount++;
+    }
+    public void ItemCollectedTree()
+    {
+        if (goalType == GoalType.GatherTree)
             currentAmount++;
     }
     public void DeliverPackage()
@@ -40,7 +50,9 @@ public class QuestGoal
 
 public enum GoalType
 {
-    Gather,
+    GatherFlint,
+    GatherMineral,
+    GatherTree,
     Kill,
     Deliver
 }
