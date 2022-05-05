@@ -89,7 +89,7 @@ public class InventorySystem : MonoBehaviour
     }
 
     [Button("Clear Inventory")]
-    public void RemoveAll()
+    private void RemoveAll()
     {
         if (!Application.isPlaying)
         {

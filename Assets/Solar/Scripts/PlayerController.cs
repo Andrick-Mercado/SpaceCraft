@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
-public class PlayerController : GravityObject
-{
-	public static PlayerController Instance;
-	
+public class PlayerController : GravityObject {
+
 	// Exposed variables
 	[Header ("Movement settings")]
 	public float walkSpeed = 8;
@@ -32,9 +30,6 @@ public class PlayerController : GravityObject
 	public float mass = 70;
 	public LayerMask walkableMask;
 	public Transform feet;
-	
-	[Header("Quests")] 
-	public Quest quest;
 
 	// Private
 	Rigidbody rb;
@@ -67,7 +62,6 @@ public class PlayerController : GravityObject
 	//for multiplayer
 	private PhotonView _view;
 	private bool _paused;
-	private bool _lockPlayerMovement;
 
 	void Awake () {
 		cam = GetComponentInChildren<Camera> ();
@@ -92,7 +86,6 @@ public class PlayerController : GravityObject
 		//get photon view component
 		_view = GetComponent<PhotonView>();
 		_paused = false;
-		_lockPlayerMovement = false;
 	}
 
 	private void Start()
@@ -102,12 +95,7 @@ public class PlayerController : GravityObject
 		{
 			Destroy(GetComponentInChildren<Camera>().gameObject);
 			Destroy(rb);
-			return;
 		}
-
-		QuestGiver.Instance.OnLockPlayerMovementEvent += OnLockPlayerMovement;
-		QuestGiver.Instance.OnUnlockPlayerMovementEvent += OnUnlockPlayerMovement;
-		QuestGiver.Instance.OnGiveQuestEvent += OnSetQuest;
 	}
 
 	void InitRigidbody () {
@@ -133,8 +121,6 @@ public class PlayerController : GravityObject
 		if (_view)
 			//prevent other players from moving others or if game is paused
 			if (!_view.IsMine || _paused) return;
-		
-		if (_lockPlayerMovement) return;
 		
 		HandleEditorInput ();
 		// Look input
@@ -294,15 +280,17 @@ public class PlayerController : GravityObject
 			{
 				MenuManager.Instance.OpenMenu("UIPanel");
 				_paused = false;
-				
-				OnUnlockPlayerMovement();
+
+				Cursor.visible = false;
+				Cursor.lockState = CursorLockMode.Locked;
 			}
 			else
 			{
 				MenuManager.Instance.OpenMenu("pauseMenu");
 				_paused = true;
-				
-				OnLockPlayerMovement();
+                
+				Cursor.visible = true;
+				Cursor.lockState = CursorLockMode.None;
 			}
 		}
 	}
@@ -312,32 +300,5 @@ public class PlayerController : GravityObject
     {
 		return referenceBody.name;
     }
-	private void OnLockPlayerMovement()
-	{
-		if (_view)
-			if (!_view.IsMine) return;
-		
-		_lockPlayerMovement = true;
-		Cursor.visible = true;
-		Cursor.lockState = CursorLockMode.None;
-	}
-
-	private void OnUnlockPlayerMovement()
-	{
-		if (_view)
-			if (!_view.IsMine) return;
-		
-		_lockPlayerMovement = false;
-		Cursor.visible = false;
-		Cursor.lockState = CursorLockMode.Locked;
-	}
-
-	private void OnSetQuest(Quest setQuest)
-	{
-		quest = setQuest;
-	}
-	
-	
-	
 
 }

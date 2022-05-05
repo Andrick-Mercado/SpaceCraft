@@ -22,7 +22,6 @@ public class InteractableObject : MonoBehaviour
     [Header("Settings")] [SerializeField] private float alphaSlewRate;
     [SerializeField] bool AllowInteraction = true;
     [SerializeField] private UnityEvent OnInteractionCompleted;
-    [SerializeField] private bool isKinematic;
 
     public bool CanInteract => AllowInteraction;
     private float _targetAlpha = 0f;
@@ -53,8 +52,6 @@ public class InteractableObject : MonoBehaviour
             promptGroup.alpha = Mathf.MoveTowards(promptGroup.alpha, _targetAlpha, alphaSlewRate * Time.deltaTime);
         }
 
-        if (isKinematic) return;
-        
         if (promptGroup.alpha > 0)
         {
             Transform camT = Camera.main.transform;
@@ -103,30 +100,10 @@ public class InteractableObject : MonoBehaviour
     [PunRPC]
     private void InteractionCompleted()
     {
-        //Debug.Log("Interacted with: "+ configSO.Name);
- 
-        if (configSO.Name == "Quest Getter")
-        {
-            promptGroup.alpha = _targetAlpha = 0f;
-            OnInteractionCompleted.Invoke();
-            QuestGiver.Instance.OpenQuestWindow();
-        }
-        else if (configSO.Name == "SpaceShip")
-        {
-            if (QuestGiver.Instance.GetCurrentQuest() != null && QuestGiver.Instance.GetCurrentQuest().questGoal[0].goalType == GoalType.Deliver) 
-            {
-                Debug.Log("Supplies turned in");
-                AllowInteraction = false;
-                promptGroup.alpha = _targetAlpha = 0f;
-                
-                QuestGiver.Instance.GetCurrentQuest().Complete();
-                QuestGiver.Instance.CurrentQuest++;
-                
-                InventorySystem.Instance.RemoveAll();
-            }
-        }
+        Debug.Log("Interacted with: "+ configSO.Name);
+        
         //only added to our inventory if its an inventory item and delete it afterwards
-        else if(TryGetComponent<ItemObject>(out ItemObject itemObject))
+        if (TryGetComponent<ItemObject>(out ItemObject itemObject))
         {
             itemObject.OnHandlePickupItem();
             AllowInteraction = false;
@@ -134,7 +111,7 @@ public class InteractableObject : MonoBehaviour
             OnInteractionCompleted.Invoke();
             Destroy(gameObject);
         }
-
+        
         //here we can add other interaction systems
     }
 }
