@@ -48,6 +48,8 @@ MonoBehaviour:
   - GiveQuestPlayers
   - CurrenQuestAdd
   - OnHandlePickupItemOverNetwork
+  - LeaveRoom
+  - LeaveRoomPlayers
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
