@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1cf43e303dd354502bcaddeec557e12a, type: 3}
-  m_Name: Tumbling Bean
+  m_Name: Moon
   m_EditorClassIdentifier: 
-  shape: {fileID: 11400000, guid: 7c0472800b98e4d36a961be4e663c927, type: 2}
-  shading: {fileID: 11400000, guid: abbaf8bc8e8994a2e961dfb1601c1e31, type: 2}
+  shape: {fileID: 11400000, guid: d0ea72bd0c9054fdcaf9077af581924d, type: 2}
+  shading: {fileID: 11400000, guid: e60e19ae83b6445fb81e5ceb25aaccad, type: 2}

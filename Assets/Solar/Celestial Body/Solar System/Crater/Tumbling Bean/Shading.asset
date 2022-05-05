@@ -13,18 +13,16 @@ MonoBehaviour:
   m_Name: Shading
   m_EditorClassIdentifier: 
   randomize: 0
-  seed: 0
+  seed: 1
   terrainMaterial: {fileID: 2100000, guid: 52668d7df62434447ac2d5a561dc5d9c, type: 2}
-  hasAtmosphere: 0
-  atmosphereSettings: {fileID: 0}
   hasOcean: 0
   oceanLevel: 0
   oceanSettings: {fileID: 11400000, guid: 2dda04ece1bc5461c9c060d959433048, type: 2}
   shadingDataCompute: {fileID: 7200000, guid: 8f6c3d86008df43ca88b9d64cf8e0514, type: 3}
   primaryColA: {r: 0.15864186, g: 0.18783918, b: 0.21698111, a: 0}
   secondaryColA: {r: 0.38274297, g: 0.4439998, b: 0.5754717, a: 0}
-  primaryColB: {r: 0.039215688, g: 0.40392157, b: 0.3080389, a: 1}
-  secondaryColB: {r: 0.43867922, g: 1, b: 0.9953623, a: 0}
+  primaryColB: {r: 0.8441123, g: 0.8584906, b: 0.10123708, a: 1}
+  secondaryColB: {r: 1, g: 0.43921566, b: 0.61075455, a: 0}
   steepCol: {r: 0, g: 0, b: 0, a: 1}
   numBiomePoints: 32
   radiusMinMax: {x: 0.001, y: 0.03}

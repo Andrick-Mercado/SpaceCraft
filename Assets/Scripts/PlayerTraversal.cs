@@ -107,7 +107,7 @@ public class PlayerTraversal : MonoBehaviour
             yield return null;
         }
         inTraversal = false;
-
+        rb.velocity = Vector3.zero;
         //pc.enabled = true;
         //rb.isKinematic = false;
     }
