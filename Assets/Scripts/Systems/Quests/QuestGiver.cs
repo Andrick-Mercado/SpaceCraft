@@ -7,13 +7,21 @@ public class QuestGiver : MonoBehaviour
 {
     public static QuestGiver Instance;
     
-    public Quest[] quest;
-    //public PlayerController playerController;
-
-    public TextMeshProUGUI questName;
-    public TextMeshProUGUI questDescription;
-    public TextMeshProUGUI questExperience;
-
+    [Header("Dependencies")]
+    [SerializeField]
+    private TextMeshProUGUI questName;
+    [SerializeField]
+    private TextMeshProUGUI questDescription;
+    [SerializeField]
+    private TextMeshProUGUI questExperience;
+    [SerializeField]
+    private TextMeshProUGUI questDisplay;
+    
+    [Header("Quest Info")]
+    [SerializeField]
+    private Quest[] quest;
+    
+    
     [HideInInspector] public int CurrentQuest;
     
     public delegate void LockPlayerMovementEvent();
@@ -66,20 +74,35 @@ public class QuestGiver : MonoBehaviour
             MenuManager.Instance.OpenMenu("UIPanel");
             //PlayerController.Instance.LockPlayerMovement(false);
             OnUnlockPlayerMovementEvent?.Invoke();
+            questDisplay.text = "+ Finished All Available Quests";//+ Quest GatherFlint Colletect 3 Flint
             return;
         }
         MenuManager.Instance.OpenMenu("UIPanel");
         quest[CurrentQuest].isActive = true;
-        //PlayerController.Instance.quest = quest[CurrentQuest];
+        
         _view.RPC(nameof(GiveQuestPlayers), RpcTarget.AllBuffered);
         
-        //PlayerController.Instance.LockPlayerMovement(false);
+        
         OnUnlockPlayerMovementEvent?.Invoke();
     }
 
     [PunRPC]
     private void GiveQuestPlayers()
     {
+        if (quest[CurrentQuest].questGoal[0].goalType == GoalType.Deliver)
+        {
+            questDisplay.text = "+ Quest Deliver items to spaceship!";
+        }
+        else if (quest[CurrentQuest].questGoal[0].goalType == GoalType.Kill)
+        {
+            questDisplay.text = $"+ Quest Kill {quest[CurrentQuest].questGoal[0].requiredAmount} Birds";
+        }
+        else
+        {
+            questDisplay.text = $"+ Quest Gather {quest[CurrentQuest].questGoal[0].requiredAmount} " 
+                                + quest[CurrentQuest].questGoal[0].goalType.ToString().Remove(0,6);
+        }
+        
         OnGiveQuestEvent?.Invoke(quest[CurrentQuest]);
     }
 
