@@ -262,7 +262,7 @@ public class Boid : MonoBehaviour
         {
             if (b == boi) continue;
             //Can only have 3 other boid neighbors to flock. Help stop flocking of EVERY boid
-            if (neighbors.Count == 3) continue;
+            if (neighbors.Count == 3) break;
             
             delta = b.transform.position - boi.transform.position;
             dist = delta.magnitude;
