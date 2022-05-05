@@ -86,6 +86,7 @@ public class PlayerTraversal : MonoBehaviour
     public void TraversalNoInput()
     {
         MenuManager.Instance.CloseMenu("traversalMenu");
+        MenuManager.Instance.TurnOnCrosshair();
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
