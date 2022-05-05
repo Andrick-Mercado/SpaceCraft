@@ -150,6 +150,7 @@ MonoBehaviour:
   initialVelocity: {x: 0, y: 0, z: 0}
   bodyName: Hot
   lockPosition: 1
+  mass: 0
 --- !u!54 &4197429857690322468
 Rigidbody:
   m_ObjectHideFlags: 0

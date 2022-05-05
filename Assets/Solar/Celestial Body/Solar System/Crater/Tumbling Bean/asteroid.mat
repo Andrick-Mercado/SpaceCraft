@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Constant Companion
+  m_Name: asteroid
   m_Shader: {fileID: 4800000, guid: ebd63f199114146ddacca96d32c18d9e, type: 3}
-  m_ShaderKeywords: _USEEJECTA_ON
+  m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -60,7 +60,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMapFlat:
-        m_Texture: {fileID: 2800000, guid: 65c07d8223a8f4c0ab716441f5c8c0a1, type: 3}
+        m_Texture: {fileID: 2800000, guid: ffe9afa33c72745dead53ac360847ec2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMapSteep:
@@ -84,65 +84,62 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _BiomeBlendStrength: 1.37
+    - _BiomeBlendStrength: 10.48
     - _BiomeDistortStrength: 0.33
-    - _BiomeWarpStrength: 6.08
-    - _BiomeWeight: 0.85
+    - _BiomeWarpStrength: 15.77
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _EjectaBrightness: 0
-    - _FresnelPow: 12
-    - _FresnelStrength: 5.05
-    - _FresnelStrengthFar: 9.2
-    - _FresnelStrengthMax: 5
-    - _FresnelStrengthMin: 2
-    - _FresnelStrengthNear: 1
+    - _EjectaBrightness: 0.2
+    - _FresnelPow: 10
+    - _FresnelStrength: 6
+    - _FresnelStrengthFar: 3
+    - _FresnelStrengthNear: 0.5
     - _GlossMapScale: 1
     - _Glossiness: 0.6
     - _GlossyReflections: 1
-    - _MainTexScale: 8
-    - _Metallic: 0.0163126
-    - _MetallicA: 0.811
+    - _MainTexScale: 4
+    - _Metallic: 0.002900413
+    - _MetallicA: 0.642
     - _MetallicB: 0
     - _Mode: 0
     - _NormalMapFlatScale: 20
     - _NormalMapScale: 5
     - _NormalMapSteepScale: 20
-    - _NormalMapStrength: 0.589
+    - _NormalMapStrength: 0.632
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _PolesStartLongitude: 0.8486198
     - _PolesVisibility: 1
-    - _SmoothnessA: 0.018220196
-    - _SmoothnessB: 0.18875508
-    - _SmoothnessEjecta: 0.037
+    - _SmoothnessA: 0.248
+    - _SmoothnessB: 0.417
+    - _SmoothnessEjecta: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _TexNoiseScale: 0.44
     - _TextureMinBrightness: 1
     - _UVSec: 0
-    - _UseEjecta: 1
+    - _UseEjecta: 0
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Color2: {r: 0.7735849, g: 0.7735849, b: 0.7735849, a: 1}
     - _Color3: {r: 0.13207549, g: 0.13207549, b: 0.13207549, a: 1}
     - _Color4: {r: 1, g: 1, b: 1, a: 1}
-    - _EjectaCol: {r: 1, g: 0.96323127, b: 0.9386792, a: 1}
+    - _EjectaCol: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FresnelCol: {r: 1, g: 0.90105057, b: 0.6650944, a: 1}
+    - _FresnelCol: {r: 0, g: 0.51349497, b: 1, a: 1}
     - _NormalMapScales: {r: 10, g: 10, b: 0, a: 0}
     - _Params: {r: 0.23, g: -1.27, b: 0.26, a: 0.52}
-    - _PrimaryColA: {r: 1, g: 1, b: 1, a: 0}
-    - _PrimaryColB: {r: 0.1792453, g: 0.1792453, b: 0.1792453, a: 1}
-    - _RandomBiomeValues: {r: -4.41, g: 0, b: -1.18, a: 5.65}
+    - _PrimaryColA: {r: 0.15864186, g: 0.18783918, b: 0.21698111, a: 0}
+    - _PrimaryColB: {r: 0.039215688, g: 0.40392157, b: 0.3080389, a: 1}
+    - _RandomBiomeValues: {r: 0.85, g: -0.48, b: 2, a: -7.82}
     - _RandomPoleValues: {r: -0.14810935, g: -0.00710578, b: 0.08569491, a: 2.2706196}
     - _RandomValues: {r: -1, g: 0.19, b: 0.4, a: -0.28}
-    - _SecondaryColA: {r: 0.735849, g: 0.735849, b: 0.735849, a: 0}
-    - _SecondaryColB: {r: 0, g: 0, b: 0, a: 0}
-    - _TestParams: {r: 0.07, g: 0.48, b: 0.18, a: 0}
+    - _SecondaryColA: {r: 0.38274297, g: 0.4439998, b: 0.5754717, a: 0}
+    - _SecondaryColB: {r: 0.43867922, g: 1, b: 0.9953623, a: 0}
+    - _TestParams: {r: 0, g: 1.15, b: 1.5, a: 13.36}
     - _TextureMask: {r: 0, g: 0, b: 1, a: 0}
     - _TextureWeights: {r: 0, g: 0, b: 0, a: 1}

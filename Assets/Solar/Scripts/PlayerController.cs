@@ -108,6 +108,7 @@ public class PlayerController : GravityObject
 		QuestGiver.Instance.OnLockPlayerMovementEvent += OnLockPlayerMovement;
 		QuestGiver.Instance.OnUnlockPlayerMovementEvent += OnUnlockPlayerMovement;
 		QuestGiver.Instance.OnGiveQuestEvent += OnSetQuest;
+		MenuManager.Instance.TurnOnCrosshair();
 	}
 
 	void InitRigidbody () {
@@ -293,6 +294,7 @@ public class PlayerController : GravityObject
 			if (_paused)
 			{
 				MenuManager.Instance.OpenMenu("UIPanel");
+				MenuManager.Instance.TurnOnCrosshair();
 				_paused = false;
 				
 				OnUnlockPlayerMovement();
@@ -300,6 +302,7 @@ public class PlayerController : GravityObject
 			else
 			{
 				MenuManager.Instance.OpenMenu("pauseMenu");
+				MenuManager.Instance.TurnOffCrosshair();
 				_paused = true;
 				
 				OnLockPlayerMovement();

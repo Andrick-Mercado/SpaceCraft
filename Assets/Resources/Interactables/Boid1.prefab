@@ -323,7 +323,7 @@ GameObject:
   - component: {fileID: 2014501255971014067}
   - component: {fileID: 4608266110118382923}
   - component: {fileID: 5137321624763908760}
-  - component: {fileID: -1977259663160588767}
+  - component: {fileID: 5912999365190080810}
   m_Layer: 0
   m_Name: Boid1
   m_TagString: Untagged
@@ -521,11 +521,11 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: -1977259663160588767}
+  - {fileID: 5912999365190080810}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &-1977259663160588767
+--- !u!114 &5912999365190080810
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -534,13 +534,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 5314415108215690934}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 1
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3
 --- !u!1 &5735950085957637756
 GameObject:
   m_ObjectHideFlags: 0
