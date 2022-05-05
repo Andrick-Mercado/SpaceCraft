@@ -79,7 +79,6 @@ public class PlayerTraversal : MonoBehaviour
 
     public void TraversalYesInput()
     {
-        Debug.Log("Traversal Yes");
         inTraversal = true;
         StartCoroutine(MoveToPlanet(transform.position));
     }
@@ -93,12 +92,10 @@ public class PlayerTraversal : MonoBehaviour
 
     IEnumerator MoveToPlanet(Vector3 currPos)
     {
-        //pc.enabled = false;
-        //rb.isKinematic = true;
-
         TraversalNoInput();
+        MenuManager.Instance.TurnOffCrosshair();
         float time = 0;
-        rayHit = rayHit + rayHitNormal * 5f;
+        rayHit = rayHit + rayHitNormal * 1.5f;
         while(time < 1)
         {
             time += Time.deltaTime * .1f;
@@ -106,9 +103,8 @@ public class PlayerTraversal : MonoBehaviour
             transform.position = Vector3.Lerp(currPos, rayHit, time);
             yield return null;
         }
+        rb.velocity = Vector3.zero;
         inTraversal = false;
-
-        //pc.enabled = true;
-        //rb.isKinematic = false;
+        MenuManager.Instance.TurnOnCrosshair();
     }
 }

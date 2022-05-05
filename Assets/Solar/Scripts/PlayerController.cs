@@ -96,6 +96,7 @@ public class PlayerController : GravityObject {
 			Destroy(GetComponentInChildren<Camera>().gameObject);
 			Destroy(rb);
 		}
+		MenuManager.Instance.TurnOnCrosshair();
 	}
 
 	void InitRigidbody () {
@@ -279,6 +280,7 @@ public class PlayerController : GravityObject {
 			if (_paused)
 			{
 				MenuManager.Instance.OpenMenu("UIPanel");
+				MenuManager.Instance.TurnOnCrosshair();
 				_paused = false;
 
 				Cursor.visible = false;
@@ -287,6 +289,7 @@ public class PlayerController : GravityObject {
 			else
 			{
 				MenuManager.Instance.OpenMenu("pauseMenu");
+				MenuManager.Instance.TurnOffCrosshair();
 				_paused = true;
                 
 				Cursor.visible = true;
