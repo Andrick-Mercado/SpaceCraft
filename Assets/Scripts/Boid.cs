@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Photon.Pun;
 public class Boid : MonoBehaviour
 {
 
@@ -21,10 +21,6 @@ public class Boid : MonoBehaviour
     public GameObject PlayerPrefab;
     public CelestialBody referenceBody;
 
-    public float moveSpeed;
-    public int spawnPlanetPadding;
-
-
     public Rigidbody rb;
 
     public Transform feet;
@@ -37,6 +33,30 @@ public class Boid : MonoBehaviour
 
     // Initialize this Boid on Awake()
     void Awake () {
+        // Give the Boid a random color
+        Color randColor = Color.black;
+        while (randColor.r + randColor.g + randColor.b < 1.0f)
+        {
+            randColor = new Color(Random.value, Random.value, Random.value);
+        }
+        Renderer[] rends = gameObject.GetComponentsInChildren<Renderer>();
+        foreach (Renderer r in rends)
+        {
+            if (r.transform.name == "EyeL" || r.transform.name == "EyeR")
+            {
+                r.material.color = Color.black;
+            }
+            else
+            {
+                r.material.color = randColor;
+            }
+
+        }
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
+        
         // Define the boids List if it is still null
         if (boids == null)
         {
@@ -49,23 +69,7 @@ public class Boid : MonoBehaviour
         neighbors = new List<Boid>();
         collisionRisks = new List<Boid>();
 
-        // Give the Boid a random color
-        Color randColor = Color.black;
-        while ( randColor.r + randColor.g + randColor.b < 1.0f ) {
-           randColor = new Color(Random.value, Random.value, Random.value);
-        }
-        Renderer[] rends = gameObject.GetComponentsInChildren<Renderer>();
-        foreach ( Renderer r in rends ) {
-            if (r.transform.name == "EyeL" || r.transform.name == "EyeR")
-            {
-                r.material.color = Color.black;
-            }
-            else
-            {
-                r.material.color = randColor;
-            }
-            
-        }
+
         
         
     }
@@ -73,6 +77,11 @@ public class Boid : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
+        
 
         PlayerPrefab = GameObject.FindGameObjectWithTag("Player");
 
@@ -85,7 +94,7 @@ public class Boid : MonoBehaviour
 
         Vector3 disAway = transform.position - referenceBody.transform.position;
         int count = 0;
-        while(disAway.magnitude < referenceBody.radius + spawnPlanetPadding)
+        while(disAway.magnitude < referenceBody.radius + BoidSpawner.S.spawnPlanetPadding)
         {
             //Debug.Log("Boid from Planet Radius: " + disAway.magnitude);
             transform.position += transform.up * 2f;
@@ -103,6 +112,10 @@ public class Boid : MonoBehaviour
 
     // Update is called once per frame
     void Update () {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
         //bool isGrounded = IsGrounded();
         targetVelocity = rb.velocity;
 
@@ -150,6 +163,10 @@ public class Boid : MonoBehaviour
 
     
     void FixedUpdate() {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
         CalculateGravity();
 
         Vector3 dirOfPlanet = (referenceBody.transform.position - transform.position);
@@ -169,27 +186,35 @@ public class Boid : MonoBehaviour
             {
                 //Debug.Log("TOO HIGH: " + (hit.point - transform.position).magnitude);
                 //Debug.DrawRay(transform.position, dirOfPlanet, Color.white, 20);
-                rb.AddForce(-transform.up * BoidSpawner.S.moveSpeed, ForceMode.Force);
+                rb.AddForce(-transform.up * BoidSpawner.S.moveQuicklySpeed, ForceMode.Force);
             }
-            else if(playerToRayVec.magnitude < BoidSpawner.S.minDistancefromPlanet)
+            else if(playerToRayVec.magnitude < BoidSpawner.S.minDistancefromPlanet && playerToRayVec.magnitude > 1f)
             {
                 //Debug.DrawRay(transform.position, dirOfPlanet, Color.red, 20);
                 //Debug.Log("TOO LOW: " + playerToRayVec.magnitude);
-                rb.AddForce(transform.up * BoidSpawner.S.moveSpeed, ForceMode.Force);
+                //Debug.Log("quickup " + playerToRayVec.magnitude);
+                rb.AddForce(transform.up * BoidSpawner.S.moveQuicklySpeed, ForceMode.Force);
             }
-            
+            else if(playerToRayVec.magnitude < 1f)
+            {
+                //Debug.Log("VERYquickup " + playerToRayVec.magnitude);
+                Debug.DrawRay(transform.position, playerToRayVec, Color.blue, 50);
+                rb.AddForce(transform.up * BoidSpawner.S.moveReallyQuickSpeed, ForceMode.Force);
+            }
+
             //Apply resulting velocity vector to players rigidbody
             rb.velocity = movementVec;
             //rb.velocity = Vector3.ClampMagnitude(rb.velocity, moveSpeed);
 
-            //Rotation after finding direction vector to rotate object towards velocity vector
+            //Rotation after finding velocity vector to rotate object towards the direction of velocity vector
             rb.rotation = Quaternion.FromToRotation(transform.forward, rb.velocity.normalized) * rb.rotation;
             //transform.rotation = Quaternion.LookRotation(rb.velocity); 
         }
         else
         {
+            //If raycast fail, either Boid spawned inside planet or some void. Better to destroy self than use resources
             Debug.Log("BOID RAYCAST FAIL");
-            CalculateGravity();
+            Destroy(gameObject);
         }
 
     }
@@ -224,32 +249,7 @@ public class Boid : MonoBehaviour
         rb.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * rb.rotation;
     }
 
-  
-    bool IsGrounded()
-    {
-        // Sphere must not overlay terrain at origin otherwise no collision will be detected
-        // so rayRadius should not be larger than controller's capsule collider radius
-        const float rayRadius = .3f;
-        const float groundedRayDst = .2f;
-        bool grounded = false;
-
-        if (referenceBody)
-        {
-            var relativeVelocity = rb.velocity - referenceBody.velocity;
-            
-            
-            RaycastHit hit;
-            Vector3 offsetToFeet = (feet.position - transform.position);
-            Vector3 rayOrigin = rb.position + offsetToFeet + transform.up * rayRadius;
-            Vector3 rayDir = -transform.up;
-
-            grounded = Physics.SphereCast(rayOrigin, rayRadius, rayDir, out hit, groundedRayDst, walkableMask);
-            
-        }
-
-        return grounded;
-    }
-
+    //If neighboring Boids are either "nearDist" or "collisionDist" away from this Boid, add them to a List<Boid> of neighbors
     public List<Boid> GetNeighbors(Boid boi)
     {
         float closestDist = float.MaxValue;
@@ -261,6 +261,9 @@ public class Boid : MonoBehaviour
         foreach (Boid b in boids)
         {
             if (b == boi) continue;
+            //Can only have 3 other boid neighbors to flock. Help stop flocking of EVERY boid
+            if (neighbors.Count == 3) break;
+            
             delta = b.transform.position - boi.transform.position;
             dist = delta.magnitude;
             if (dist < closestDist)

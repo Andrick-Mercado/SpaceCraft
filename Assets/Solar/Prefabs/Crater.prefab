@@ -52,6 +52,7 @@ MonoBehaviour:
   initialVelocity: {x: 0, y: 0, z: 0}
   bodyName: Crater
   lockPosition: 1
+  mass: 0
 --- !u!54 &9063983724750464534
 Rigidbody:
   m_ObjectHideFlags: 0

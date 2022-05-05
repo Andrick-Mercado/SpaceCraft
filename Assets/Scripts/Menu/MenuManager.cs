@@ -64,4 +64,25 @@ public class MenuManager : MonoBehaviour
     {
         return menus.Any(t => t.menuName == menuName && t.open);
     }
+
+    public void TurnOnCrosshair()
+    {
+        foreach (var t in menus)
+        {
+            if(t.menuName == "Crosshair")
+            {
+                OpenMenu(t);
+            }
+        }
+    }
+    public void TurnOffCrosshair()
+    {
+        foreach (var t in menus)
+        {
+            if (t.menuName == "Crosshair")
+            {
+                CloseMenu(t);
+            }
+        }
+    }
 }

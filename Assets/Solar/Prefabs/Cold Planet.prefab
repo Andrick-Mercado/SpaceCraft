@@ -101,6 +101,7 @@ MonoBehaviour:
   initialVelocity: {x: 0, y: 0, z: 0}
   bodyName: Cold
   lockPosition: 1
+  mass: 0
 --- !u!54 &881042856118026374
 Rigidbody:
   m_ObjectHideFlags: 0

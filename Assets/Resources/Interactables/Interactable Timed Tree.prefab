@@ -686,6 +686,7 @@ MonoBehaviour:
   OnInteractionCompleted:
     m_PersistentCalls:
       m_Calls: []
+  isKinematic: 0
 --- !u!114 &7854783029865849448
 MonoBehaviour:
   m_ObjectHideFlags: 0

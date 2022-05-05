@@ -15,14 +15,14 @@ public class CelestialBody : GravityObject {
     Transform meshHolder;
 
     public Vector3 velocity { get; private set; }
-    public float mass { get; private set; }
+    public float mass;
     Rigidbody rb;
 
     void Awake () {
 
         rb = GetComponent<Rigidbody> ();
         velocity = initialVelocity;
-        RecalculateMass ();
+        //RecalculateMass ();
     }
 
     public void UpdateVelocity (CelestialBody[] allBodies, float timeStep) {
@@ -56,7 +56,7 @@ public class CelestialBody : GravityObject {
     }
 
     void OnValidate () {
-        RecalculateMass ();
+        //RecalculateMass ();
         if (GetComponentInChildren<CelestialBodyGenerator> ()) {
             GetComponentInChildren<CelestialBodyGenerator> ().transform.localScale = Vector3.one * radius;
         }
