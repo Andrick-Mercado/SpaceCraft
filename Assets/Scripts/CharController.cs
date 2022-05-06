@@ -62,8 +62,8 @@ public class CharController : MonoBehaviour
 
 
         //Locks and makes Mouse Cursor invisible when focused on game window
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
         
     }
 
