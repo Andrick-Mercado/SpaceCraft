@@ -101,7 +101,6 @@ public class Boid : MonoBehaviour
 
     // Update is called once per frame
     void Update () {
-        return;
         if (!PhotonNetwork.IsMasterClient)
         {
             return;
@@ -152,7 +151,6 @@ public class Boid : MonoBehaviour
 
     
     void FixedUpdate() {
-        return;
         if (!PhotonNetwork.IsMasterClient)
         {
             return;
@@ -245,6 +243,7 @@ public class Boid : MonoBehaviour
         foreach (Boid b in boids)
         {
             if (b == boi) continue;
+            if (b == null) continue;
             //Can only have 3 other boid neighbors to flock. Help stop flocking of EVERY boid
             if (neighbors.Count == 3) break;
             
