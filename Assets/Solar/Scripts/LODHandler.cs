@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-[ExecuteInEditMode]
+//[ExecuteInEditMode]
 public class LODHandler : MonoBehaviour {
 	[Header ("LOD screen heights")]
 	// LOD level is determined by body's screen height (1 = taking up entire screen, 0 = teeny weeny speck) 
