@@ -65,6 +65,20 @@ public class ItemObject : MonoBehaviour
                 CrossTextCompletion();
             }
         }
+        if (QuestGiver.Instance.GetCurrentQuest() != null 
+                && QuestGiver.Instance.GetCurrentQuest().isActive 
+                    && QuestGiver.Instance.GetCurrentQuest().questGoal[0].goalType == GoalType.Kill
+                        && referenceItem.displayName == "Flying Face")
+        {
+            QuestGiver.Instance.GetCurrentQuest().questGoal[0].EnemyKilled();
+
+            if (QuestGiver.Instance.GetCurrentQuest().questGoal[0].IsReached())
+            {
+                QuestGiver.Instance.GetCurrentQuest().Complete();
+                QuestGiver.Instance.CurrentQuest++;
+                CrossTextCompletion();
+            }
+        }
     }
 
     private void CrossTextCompletion()
