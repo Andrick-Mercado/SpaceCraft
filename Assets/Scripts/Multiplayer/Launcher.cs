@@ -75,9 +75,15 @@ public class Launcher : MonoBehaviourPunCallbacks
             Destroy(t.gameObject);
         }
 
-        foreach (var t in roomList.Where(t => !t.RemovedFromList ))//|| !t.IsOpen))
+        // foreach (var t in roomList.Where(t =>  !t.RemovedFromList || !t.IsOpen))
+        // {
+        //     Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(t);
+        // }
+        for(int i = 0; i < roomList.Count; i++)
         {
-            Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(t);
+            if(roomList[i].RemovedFromList )
+                continue;
+            Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(roomList[i]);
         }
     }
 

@@ -36,10 +36,15 @@ public class LODHandler : MonoBehaviour {
 		DebugLODInfo ();
         if (cam == null)
         {
-			cam = Camera.main;
+			cam = Camera.main == null? null : Camera.main;
+			if (cam == null)
+			{
+				return;
+			}
 			camT = cam.transform;
         }
-		if (Application.isPlaying && cam != null) {
+		if (Application.isPlaying && cam != null) 
+		{
 			HandleLODs ();
 		}
 

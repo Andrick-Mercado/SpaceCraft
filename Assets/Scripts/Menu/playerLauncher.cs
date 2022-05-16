@@ -21,7 +21,6 @@ public class playerLauncher : MonoBehaviourPunCallbacks
     [PunRPC]
     public void LeaveRoom()
     {
-        FindObjectOfType<DatabaseInterface>().save();
 
         if (PhotonNetwork.IsMasterClient)
         {
