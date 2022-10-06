@@ -14,7 +14,7 @@ namespace NaughtyAttributes.Editor
         public const float IndentLength = 15.0f;
         public const float HorizontalSpacing = 2.0f;
 
-        private static GUIStyle _buttonStyle = new GUIStyle(GUI.skin.button) { richText = true };
+        private static readonly GUIStyle _buttonStyle = new GUIStyle(GUI.skin.button) { richText = true };
 
         private delegate void PropertyFieldFunction(Rect rect, SerializedProperty property, GUIContent label, bool includeChildren);
 

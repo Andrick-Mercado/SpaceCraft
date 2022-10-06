@@ -198,14 +198,14 @@ namespace Photon.Pun
 
     public class PhotonTransformViewPositionControl
     {
-        PhotonTransformViewPositionModel m_Model;
+        readonly PhotonTransformViewPositionModel m_Model;
         float m_CurrentSpeed;
         double m_LastSerializeTime;
         Vector3 m_SynchronizedSpeed = Vector3.zero;
         float m_SynchronizedTurnSpeed = 0;
 
         Vector3 m_NetworkPosition;
-        Queue<Vector3> m_OldNetworkPositions = new Queue<Vector3>();
+        readonly Queue<Vector3> m_OldNetworkPositions = new Queue<Vector3>();
 
         bool m_UpdatedPositionAfterOnSerialize = true;
 
@@ -434,7 +434,7 @@ namespace Photon.Pun
 
     public class PhotonTransformViewRotationControl
     {
-        PhotonTransformViewRotationModel m_Model;
+        readonly PhotonTransformViewRotationModel m_Model;
         Quaternion m_NetworkRotation;
 
         public PhotonTransformViewRotationControl(PhotonTransformViewRotationModel model)
@@ -505,7 +505,7 @@ namespace Photon.Pun
 
     public class PhotonTransformViewScaleControl
     {
-        PhotonTransformViewScaleModel m_Model;
+        readonly PhotonTransformViewScaleModel m_Model;
         Vector3 m_NetworkScale = Vector3.one;
 
         public PhotonTransformViewScaleControl(PhotonTransformViewScaleModel model)

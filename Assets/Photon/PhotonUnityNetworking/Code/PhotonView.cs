@@ -703,9 +703,9 @@ namespace Photon.Pun
 
         private struct CallbackTargetChange
         {
-            public IPhotonViewCallback obj;
-            public Type type;
-            public bool add;
+            public readonly IPhotonViewCallback obj;
+            public readonly Type type;
+            public readonly bool add;
 
             public CallbackTargetChange(IPhotonViewCallback obj, Type type, bool add)
             {
@@ -715,7 +715,7 @@ namespace Photon.Pun
             }
         }
 
-        private Queue<CallbackTargetChange> CallbackChangeQueue = new Queue<CallbackTargetChange>();
+        private readonly Queue<CallbackTargetChange> CallbackChangeQueue = new Queue<CallbackTargetChange>();
 
         private List<IOnPhotonViewPreNetDestroy> OnPreNetDestroyCallbacks;
         private List<IOnPhotonViewOwnerChange> OnOwnerChangeCallbacks;

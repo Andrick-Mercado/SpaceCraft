@@ -14,7 +14,7 @@ namespace NaughtyAttributes.Editor
         private IEnumerable<FieldInfo> _nonSerializedFields;
         private IEnumerable<PropertyInfo> _nativeProperties;
         private IEnumerable<MethodInfo> _methods;
-        private Dictionary<string, SavedBool> _foldouts = new Dictionary<string, SavedBool>();
+        private readonly Dictionary<string, SavedBool> _foldouts = new Dictionary<string, SavedBool>();
 
         protected virtual void OnEnable()
         {

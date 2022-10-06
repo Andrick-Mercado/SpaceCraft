@@ -113,8 +113,8 @@ public class Bloom : MonoBehaviour {
 	Material _material;
 
 	const int kMaxIterations = 16;
-	RenderTexture[] _blurBuffer1 = new RenderTexture[kMaxIterations];
-	RenderTexture[] _blurBuffer2 = new RenderTexture[kMaxIterations];
+	readonly RenderTexture[] _blurBuffer1 = new RenderTexture[kMaxIterations];
+	readonly RenderTexture[] _blurBuffer2 = new RenderTexture[kMaxIterations];
 
 	float LinearToGamma (float x) {
 #if UNITY_5_3_OR_NEWER

@@ -18,10 +18,8 @@ public class playerLauncher : MonoBehaviourPunCallbacks
         _view = GetComponent<PhotonView>();
     }
     
-    [PunRPC]
     public void LeaveRoom()
     {
-
         if (PhotonNetwork.IsMasterClient)
         {
             _view.RPC(nameof(LeaveRoomPlayers), RpcTarget.AllBuffered);
@@ -33,7 +31,6 @@ public class playerLauncher : MonoBehaviourPunCallbacks
             Destroy(RoomManager.Instance.gameObject);
             PhotonNetwork.LeaveRoom();
         }
-        
     }
 
     public override void OnLeftRoom()

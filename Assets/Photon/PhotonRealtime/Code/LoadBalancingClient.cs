@@ -4350,7 +4350,7 @@ namespace Photon.Realtime
     /// </remarks>
     internal class WebRpcCallbacksContainer : List<IWebRpcCallback>, IWebRpcCallback
     {
-        private LoadBalancingClient client;
+        private readonly LoadBalancingClient client;
 
         public WebRpcCallbacksContainer(LoadBalancingClient client)
         {
@@ -4378,7 +4378,7 @@ namespace Photon.Realtime
     /// </remarks>
     internal class ErrorInfoCallbacksContainer : List<IErrorInfoCallback>, IErrorInfoCallback
     {
-        private LoadBalancingClient client;
+        private readonly LoadBalancingClient client;
 
         public ErrorInfoCallbacksContainer(LoadBalancingClient client)
         {

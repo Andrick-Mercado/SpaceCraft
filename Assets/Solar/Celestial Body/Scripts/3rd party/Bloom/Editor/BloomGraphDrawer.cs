@@ -138,9 +138,9 @@ namespace Kino
         const int _curveResolution = 96;
 
         // Vertex buffers
-        Vector3[] _rectVertices = new Vector3[4];
-        Vector3[] _lineVertices = new Vector3[2];
-        Vector3[] _curveVertices = new Vector3[_curveResolution];
+        readonly Vector3[] _rectVertices = new Vector3[4];
+        readonly Vector3[] _lineVertices = new Vector3[2];
+        readonly Vector3[] _curveVertices = new Vector3[_curveResolution];
 
         Rect _rectGraph;
         float _rangeX;

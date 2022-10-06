@@ -24,7 +24,7 @@ public class SuperCamera : MonoBehaviour {
     public float wheelSensibility = 10;
 
 
-    private float delayDoubleClic = 0.2f;
+    private readonly float delayDoubleClic = 0.2f;
 
 
     private Vector3 oldCamPos;

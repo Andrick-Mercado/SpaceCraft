@@ -13,7 +13,7 @@ public class CelestialBodyGenerator : MonoBehaviour {
 
 	public CelestialBodySettings body;
 
-	bool debugDoubleUpdate = true;
+	readonly bool debugDoubleUpdate = true;
 	int debug_numUpdates;
 
 	// Private variables

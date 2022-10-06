@@ -41,7 +41,7 @@ namespace Photon.Pun.UtilityScripts
         // used to limit the number of UpdateInterestGroups calls per second (there is no use to change groups more than a few times per second, even if the Culling algorithm makes it look like that)
         private float timeSinceUpdate;
         // see timeSinceUpdate
-        private float timeBetweenUpdatesMin = 0.33f;
+        private readonly float timeBetweenUpdatesMin = 0.33f;
 
 
         #endregion

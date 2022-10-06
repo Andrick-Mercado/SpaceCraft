@@ -30,7 +30,7 @@ namespace Photon.Pun
 
         private static HashSet<byte> blockedSendingGroups = new HashSet<byte>();
 
-        private static HashSet<PhotonView> reusablePVHashset = new HashSet<PhotonView>();
+        private static readonly HashSet<PhotonView> reusablePVHashset = new HashSet<PhotonView>();
 
 
         /// <summary>
@@ -1187,8 +1187,8 @@ namespace Photon.Pun
         ///
         /// This is sent as event (code: 200) which will contain a sender (origin of this RPC).
 
-        static ExitGames.Client.Photon.Hashtable rpcEvent = new ExitGames.Client.Photon.Hashtable();
-        static RaiseEventOptions RpcOptionsToAll = new RaiseEventOptions();
+        static readonly ExitGames.Client.Photon.Hashtable rpcEvent = new ExitGames.Client.Photon.Hashtable();
+        static readonly RaiseEventOptions RpcOptionsToAll = new RaiseEventOptions();
 
 
         internal static void RPC(PhotonView view, string methodName, RpcTarget target, Player player, bool encrypt, params object[] parameters)
@@ -1518,7 +1518,7 @@ namespace Photon.Pun
 
 
         ///<summary> cache the RaiseEventOptions to prevent redundant Memory Allocation</summary>
-        private static RaiseEventOptions serializeRaiseEvOptions = new RaiseEventOptions();
+        private static readonly RaiseEventOptions serializeRaiseEvOptions = new RaiseEventOptions();
 
         private struct RaiseEventBatch : IEquatable<RaiseEventBatch>
         {
@@ -1540,9 +1540,9 @@ namespace Photon.Pun
         private class SerializeViewBatch : IEquatable<SerializeViewBatch>, IEquatable<RaiseEventBatch>
         {
             public readonly RaiseEventBatch Batch;
-            public List<object> ObjectUpdates;
-            private int defaultSize = PhotonNetwork.ObjectsInOneUpdate;
-            private int offset;
+            public readonly List<object> ObjectUpdates;
+            private readonly int defaultSize = PhotonNetwork.ObjectsInOneUpdate;
+            private readonly int offset;
 
 
             // the offset enables us to skip the first X entries in the ObjectUpdate(s), leaving room for (e.g.) timestamp of sending and level prefix

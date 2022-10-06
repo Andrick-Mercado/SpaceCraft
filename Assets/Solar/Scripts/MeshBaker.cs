@@ -6,7 +6,7 @@ using UnityEngine;
 
 public static class MeshBaker {
 
-	static Dictionary<Mesh, JobHandle> jobsByMesh;
+	static readonly Dictionary<Mesh, JobHandle> jobsByMesh;
 
 	static MeshBaker () {
 		jobsByMesh = new Dictionary<Mesh, JobHandle> ();
@@ -36,8 +36,7 @@ public static class MeshBaker {
 }
 
 public struct BakeJob : IJob {
-
-	int meshID;
+	readonly int meshID;
 	public BakeJob (int meshID) {
 		this.meshID = meshID;
 	}

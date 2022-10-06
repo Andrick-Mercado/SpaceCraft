@@ -11,7 +11,7 @@ namespace NaughtyAttributes.Editor
 
     public static class ValidatorAttributeExtensions
     {
-        private static Dictionary<Type, PropertyValidatorBase> _validatorsByAttributeType;
+        private static readonly Dictionary<Type, PropertyValidatorBase> _validatorsByAttributeType;
 
         static ValidatorAttributeExtensions()
         {

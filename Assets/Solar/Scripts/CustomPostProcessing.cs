@@ -7,8 +7,8 @@ using UnityEngine.Rendering;
 public class CustomPostProcessing : MonoBehaviour {
 
 	BodyEffectManager effectManager;
-	List<RenderTexture> renderSources = new List<RenderTexture> ();
-	List<RenderTexture> renderTargets = new List<RenderTexture> ();
+	readonly List<RenderTexture> renderSources = new List<RenderTexture> ();
+	readonly List<RenderTexture> renderTargets = new List<RenderTexture> ();
 	List<Material> materials;
 	Material defaultMat;
 

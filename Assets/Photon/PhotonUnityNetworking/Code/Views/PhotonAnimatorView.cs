@@ -80,7 +80,7 @@ namespace Photon.Pun
         
         private Animator m_Animator;
 
-        private PhotonStreamQueue m_StreamQueue = new PhotonStreamQueue(120);
+        private readonly PhotonStreamQueue m_StreamQueue = new PhotonStreamQueue(120);
 
         //These fields are only used in the CustomEditor for this script and would trigger a
         //"this variable is never used" warning, which I am suppressing here
@@ -112,7 +112,7 @@ namespace Photon.Pun
         /// Cached raised triggers that are set to be synchronized in discrete mode. since a Trigger only stay up for less than a frame,
         /// We need to cache it until the next discrete serialization call.
         /// </summary>
-        List<string> m_raisedDiscreteTriggersCache = new List<string>();
+        readonly List<string> m_raisedDiscreteTriggersCache = new List<string>();
 
         #endregion
 

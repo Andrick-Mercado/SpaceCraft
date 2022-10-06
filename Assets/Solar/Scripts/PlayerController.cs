@@ -32,8 +32,10 @@ public class PlayerController : GravityObject
 	public float mass = 70;
 	public LayerMask walkableMask;
 	public Transform feet;
-	
+
 	[Header("Quests")] 
+	[SerializeField]
+	private bool turnOffQuests;
 	public Quest quest;
 
 	// Private
@@ -104,6 +106,8 @@ public class PlayerController : GravityObject
 			return;
 		}
 
+		if (turnOffQuests)
+			return;
 		QuestGiver.Instance.OnLockPlayerMovementEvent += OnLockPlayerMovement;
 		QuestGiver.Instance.OnUnlockPlayerMovementEvent += OnUnlockPlayerMovement;
 		QuestGiver.Instance.OnGiveQuestEvent += OnSetQuest;

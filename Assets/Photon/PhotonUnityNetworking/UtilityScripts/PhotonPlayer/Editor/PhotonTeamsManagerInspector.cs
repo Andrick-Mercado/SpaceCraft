@@ -19,7 +19,7 @@ namespace Photon.Pun.UtilityScripts
     [CustomEditor(typeof(PhotonTeamsManager))]
     public class PhotonTeamsManagerEditor : Editor
     {
-        private Dictionary<byte, bool> foldouts = new Dictionary<byte, bool>();
+        private readonly Dictionary<byte, bool> foldouts = new Dictionary<byte, bool>();
         private PhotonTeamsManager photonTeams;
         private SerializedProperty teamsListSp;
         private SerializedProperty listFoldIsOpenSp;

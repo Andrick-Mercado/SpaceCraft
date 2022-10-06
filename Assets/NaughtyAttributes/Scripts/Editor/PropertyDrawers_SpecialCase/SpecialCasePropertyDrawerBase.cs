@@ -50,7 +50,7 @@ namespace NaughtyAttributes.Editor
 
     public static class SpecialCaseDrawerAttributeExtensions
     {
-        private static Dictionary<Type, SpecialCasePropertyDrawerBase> _drawersByAttributeType;
+        private static readonly Dictionary<Type, SpecialCasePropertyDrawerBase> _drawersByAttributeType;
 
         static SpecialCaseDrawerAttributeExtensions()
         {

@@ -170,7 +170,7 @@ namespace Photon.Realtime
             this.availableRegionCodes = string.Join(",", regions);
         }
 
-        private List<RegionPinger> pingerList = new List<RegionPinger>();
+        private readonly List<RegionPinger> pingerList = new List<RegionPinger>();
         private Action<RegionHandler> onCompleteCall;
         private int previousPing;
         public bool IsPinging { get; private set; }
@@ -336,12 +336,12 @@ namespace Photon.Realtime
         public static int MaxMilliseconsPerPing = 800; // enter a value you're sure some server can beat (have a lower rtt)
         public static int PingWhenFailed = Attempts * MaxMilliseconsPerPing;
 
-        private Region region;
+        private readonly Region region;
         private string regionAddress;
         public int CurrentAttempt = 0;
 
         public bool Done { get; private set; }
-        private Action<Region> onDoneCall;
+        private readonly Action<Region> onDoneCall;
 
         private PhotonPing ping;
 

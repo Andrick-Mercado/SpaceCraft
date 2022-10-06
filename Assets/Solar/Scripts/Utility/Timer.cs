@@ -4,7 +4,7 @@ using System.Diagnostics;
 using UnityEngine;
 
 public static class Timer {
-	static Dictionary<string, Stopwatch> timers;
+	static readonly Dictionary<string, Stopwatch> timers;
 
 	static Timer () {
 		if (timers == null) {

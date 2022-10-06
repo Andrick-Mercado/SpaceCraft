@@ -5,8 +5,9 @@ using UnityEngine;
 public class PRNG {
 
 	public enum Weight { None, Lower, Upper, Centre, Ends }
-	System.Random prng;
-	int seed;
+
+	readonly System.Random prng;
+	readonly int seed;
 
 	public int Seed {
 		get {

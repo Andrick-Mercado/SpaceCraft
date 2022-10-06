@@ -5,7 +5,7 @@ namespace NaughtyAttributes.Editor
     internal class SavedBool
     {
         private bool _value;
-        private string _name;
+        private readonly string _name;
 
         public bool Value
         {

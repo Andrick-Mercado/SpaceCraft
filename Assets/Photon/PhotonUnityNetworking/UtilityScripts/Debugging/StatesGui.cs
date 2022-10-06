@@ -64,8 +64,8 @@ namespace Photon.Pun.UtilityScripts
 
         }
 
-        float native_width = 800;
-        float native_height = 480;
+        readonly float native_width = 800;
+        readonly float native_height = 480;
         void OnGUI()
         {
             if (PhotonNetwork.NetworkingClient == null || PhotonNetwork.NetworkingClient.LoadBalancingPeer == null || PhotonNetwork.NetworkingClient.LoadBalancingPeer.TrafficStatsIncoming == null)

@@ -30,7 +30,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         if(!PhotonNetwork.IsConnected) //for when player leaves a room
             PhotonNetwork.ConnectUsingSettings();
     }
-    
+
     public override void OnConnectedToMaster()
     {
         PhotonNetwork.JoinLobby();
@@ -68,25 +68,6 @@ public class Launcher : MonoBehaviourPunCallbacks
         
     }
     
-    public override void OnRoomListUpdate(List<RoomInfo> roomList)
-    {
-        foreach (Transform t in roomListContent)
-        {
-            Destroy(t.gameObject);
-        }
-
-        // foreach (var t in roomList.Where(t =>  !t.RemovedFromList || !t.IsOpen))
-        // {
-        //     Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(t);
-        // }
-        for(int i = 0; i < roomList.Count; i++)
-        {
-            if(roomList[i].RemovedFromList )
-                continue;
-            Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(roomList[i]);
-        }
-    }
-
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
         errorText.text = "Room join failed with message: " + message;
@@ -97,7 +78,25 @@ public class Launcher : MonoBehaviourPunCallbacks
         MenuManager.Instance.OpenMenu("loadingMenu");
         StartGame();
     }
+    
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        //Debug.Log("Called Room List Update!");
+        foreach (Transform t in roomListContent)
+        {
+            // if (t.TryGetComponent(out RoomListItem roomListItem))
+            // {
+            //     Debug.Log("Room Name: "+ roomListItem.info.Name+ " - Removed: " + roomListItem.info.IsOpen);
+            // }
+            Destroy(t.gameObject); 
+        }
 
+        foreach (RoomInfo t in roomList.Where(t =>  !t.RemovedFromList ))
+        {
+            Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(t);
+        }
+    }
+    
     private void StartGame()
     {
         PhotonNetwork.LoadLevel(sceneToLoad);

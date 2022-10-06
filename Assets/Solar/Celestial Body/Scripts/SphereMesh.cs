@@ -9,10 +9,10 @@ public class SphereMesh {
 	public readonly int Resolution;
 
 	// Internal:
-	FixedSizeList<Vector3> vertices;
-	FixedSizeList<int> triangles;
-	int numDivisions;
-	int numVertsPerFace;
+	readonly FixedSizeList<Vector3> vertices;
+	readonly FixedSizeList<int> triangles;
+	readonly int numDivisions;
+	readonly int numVertsPerFace;
 
 	// Indices of the vertex pairs that make up each of the initial 12 edges
 	static readonly int[] vertexPairs = { 0, 1, 0, 2, 0, 3, 0, 4, 1, 2, 2, 3, 3, 4, 4, 1, 5, 1, 5, 2, 5, 3, 5, 4 };

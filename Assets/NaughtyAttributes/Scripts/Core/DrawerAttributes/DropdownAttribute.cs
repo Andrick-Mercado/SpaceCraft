@@ -21,7 +21,7 @@ namespace NaughtyAttributes
 
     public class DropdownList<T> : IDropdownList
     {
-        private List<KeyValuePair<string, object>> _values;
+        private readonly List<KeyValuePair<string, object>> _values;
 
         public DropdownList()
         {

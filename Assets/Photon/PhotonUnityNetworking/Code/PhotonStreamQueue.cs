@@ -23,7 +23,7 @@ namespace Photon.Pun
     /// </summary>
     public class PhotonStreamQueue
     {
-        private int m_SampleRate;
+        private readonly int m_SampleRate;
         private int m_SampleCount;
         private int m_ObjectsPerSample = -1;
 
@@ -31,7 +31,7 @@ namespace Photon.Pun
         private int m_LastFrameCount = -1;
         private int m_NextObjectIndex = -1;
 
-        private List<object> m_Objects = new List<object>();
+        private readonly List<object> m_Objects = new List<object>();
 
         private bool m_IsWriting;
 

@@ -168,7 +168,7 @@ namespace Photon.Chat
         private int? statusToSetWhenConnected;
         private object messageToSetWhenConnected;
 
-        private int msDeltaForServiceCalls = 50;
+        private readonly int msDeltaForServiceCalls = 50;
         private int msTimestampOfLastServiceCall;
 
         /// <summary>Defines if a background thread will call SendOutgoingCommands, while your code calls Service to dispatch received messages.</summary>
